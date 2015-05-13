@@ -75,6 +75,6 @@ public abstract class Entity implements Collidable{
 
     @Override
     public boolean isColliding(Entity entity) {
-        return position.difference(entity.getPosition()).toSquareScalar() < map.getSquareTileDiameter();
+        return position.difference(entity.getPosition()).toSquareScalar() < map.getSquareTileDiameter()+1;
     }
 }

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
@@ -11,18 +12,34 @@ import android.view.SurfaceView;
 
 
 public class MainActivity extends ActionBarActivity {
-
-    Panel panel;
+    private Panel panel;
+    private Map map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         initialize();
     }
 
     private void initialize() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        Vector screenDimensions = new Vector(metrics.widthPixels, metrics.heightPixels);
+
         panel = ((Panel)findViewById(R.id.mainPanel));
+        Vector panelDimensions = new Vector(panel.getMeasuredWidth(), panel.getMeasuredHeight());
+
+        try {
+            map = new Map("", panelDimensions);
+        } catch (SocratesNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

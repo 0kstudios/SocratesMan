@@ -5,26 +5,27 @@ import java.util.ArrayList;
 /**
  * Created by Kevin on 5/12/2015.
  */
-public class EntityGrid implements Collidable {
+public class EntityGrid<SE extends StaticEntity> implements Collidable {
     private Map map;
 
-    private StaticEntity[][] entities;
+    private SE[][] entities;
 
     //private static final Vector[] DIRECTIONS = {new Vector(0,0), new Vector(0,1), new Vector(1,1), new Vector(1,0), new Vector(1,-1), new Vector(0,-1), new Vector(-1,-1), new Vector(-1,0), new Vector(-1,1)};
 
-    public EntityGrid(Map aMap, ArrayList<StaticEntity> aEntities) {
+    @SuppressWarnings("unchecked") //arraylist must accept type SE thus it is safe to cast to SE
+    public EntityGrid(Map aMap, ArrayList<SE> aEntities) {
         map = aMap;
-        entities = new StaticEntity[map.getGridDimensions().X][map.getGridDimensions().Y];
-        for (StaticEntity entity : aEntities) {
+        entities = (SE[][])(new StaticEntity[map.getGridDimensions().X][map.getGridDimensions().Y]);
+        for (SE entity : aEntities) {
             entities[toGridPosition(entity.getPosition()).X][toGridPosition(entity.getPosition()).Y] = entity;
         }
     }
 
-    public StaticEntity getEntity(Vector position) {
+    public SE getEntity(Vector position) {
         return entities[toGridPosition(position).X][toGridPosition(position).Y];
     }
 
-    public void setEntity(StaticEntity entity) {
+    public void setEntity(SE entity) {
         entities[toGridPosition(entity.getPosition()).X][toGridPosition(entity.getPosition()).Y] = entity;
     }
 
@@ -35,12 +36,12 @@ public class EntityGrid implements Collidable {
 
     @Override
     public void onCollide(CollideEvent event) {
-        
+
     }
 
-//    private ArrayList<StaticEntity> getSurroundings(Vector position) {
+//    private ArrayList<SE> getSurroundings(Vector position) {
 //        position = toGridPosition(position);
-//        ArrayList<StaticEntity> surroundings = new ArrayList<StaticEntity>();
+//        ArrayList<SE> surroundings = new ArrayList<SE>();
 //        for (Vector direction : DIRECTIONS) {
 //            Vector target = new Vector(position.X + direction.X, position.Y + direction.Y) ;
 //            if (isInBounds(target)) {
