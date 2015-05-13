@@ -26,15 +26,12 @@ public class AnimationThread<SV extends SurfaceView & SurfaceHolder.Callback> ex
 
     @Override
     public void run() {
-        Canvas canvas;
+        Canvas canvas = null;
         while (run) {
-            canvas = null;
             try {
-                canvas = surfaceHolder.lockCanvas(null);
+                canvas = surfaceHolder.lockCanvas();
                 synchronized (surfaceHolder) {
-                    System.out.println("draw call");
                     surfaceView.draw(canvas); // originally this was onDraw(). hopefully this calls onDraw.
-                    sleep(TICK_TIME);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -42,6 +39,11 @@ public class AnimationThread<SV extends SurfaceView & SurfaceHolder.Callback> ex
                 if (canvas != null) {
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
+            }
+            try {
+                sleep(TICK_TIME);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }

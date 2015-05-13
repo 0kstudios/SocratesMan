@@ -15,22 +15,29 @@ import android.view.SurfaceView;
  */
 public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 
+    Bitmap droid;
     private AnimationThread<Panel> animationThread;
 
     public Panel(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         getHolder().addCallback(this);
         animationThread = new AnimationThread<Panel>(getHolder(), this);
+
+        initDrawables();
+    }
+
+    private void initDrawables() {
+        droid = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        System.out.println("draw called");
-        Paint paint = new Paint();
-        Bitmap droid = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        canvas.drawColor(Color.BLUE);
+        clear(canvas);
         canvas.drawBitmap(droid, 10, 10, null);
+    }
 
+    private void clear(Canvas canvas) {
+        canvas.drawColor(Color.DKGRAY);
     }
 
     @Override
