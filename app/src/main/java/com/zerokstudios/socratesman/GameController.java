@@ -25,7 +25,7 @@ public class GameController {
 
     public boolean setMap(Vector gridDimensions, Vector panelDimensions) {
         try {
-            map = new Map(gridDimensions, panelDimensions); // make sure to get map dimension options from user
+            map = new Map(gridDimensions, panelDimensions, oi); // make sure to get map dimension options from user
             return true;
         } catch (SocratesNotFoundException e) {
             e.printStackTrace();
@@ -66,22 +66,30 @@ public class GameController {
             pause();
         } else {
             EntityGrid<Wall> walls = map.getWalls();
+            ArrayList<Ghost> ghosts = map.getGhosts();
+            EntityGrid<Pill> pills = map.getPills();
+
+            socrates.update();
+
             if (walls.isColliding(socrates, time)) {
                 socrates.onCollide(new CollideEvent(walls));
                 walls.onCollide(new CollideEvent(socrates));
             }
-            ArrayList<Ghost> ghosts = map.getGhosts();
             for (Ghost ghost : ghosts) {
                 if (socrates.isColliding(ghost, time)) {
                     socrates.onCollide(new CollideEvent(ghost));
                     ghost.onCollide(new CollideEvent(socrates));
                 }
+                if (walls.isColliding(ghost, time)) {
+                    ghost.onCollide(new CollideEvent(walls));
+                    walls.onCollide(new CollideEvent(ghost));
+                }
             }
-            EntityGrid<Pill> pills = map.getPills();
             if (pills.isColliding(socrates, time)) {
                 socrates.onCollide(new CollideEvent(pills));
                 pills.onCollide(new CollideEvent(socrates));
             }
+
             socrates.tick(time);
             for (Ghost ghost : ghosts) {
                 ghost.tick(time);

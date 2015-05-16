@@ -28,7 +28,7 @@ public class Map {
     private ArrayList<Ghost> ghosts;
     private Socrates socrates;
 
-    public Map(Vector aGridDimensions, Vector aPixelDimensions) throws SocratesNotFoundException {
+    public Map(Vector aGridDimensions, Vector aPixelDimensions, OI oi) throws SocratesNotFoundException {
         gridDimensions = aGridDimensions;
         setPixelDimensions(aPixelDimensions);
 
@@ -41,20 +41,20 @@ public class Map {
             for (char ch : chA) {
                 switch (ch) {
                     case Dictionary.WALL:
-                        wallList.add(new Wall(this, new Vector(i, j), null));
+                        wallList.add(new Wall(this, new Vector(i, j), oi, null));
                         break;
                     case Dictionary.GHOST:
-                        ghostList.add(new Ghost(this, new Vector(i, j), new Vector(0, 0), null));
+                        ghostList.add(new Ghost(this, new Vector(i, j), new Vector(0, 0), oi, null));
                         break;
                     case Dictionary.SOCRATES:
                         if (player != null) {
                             throw new SocratesNotFoundException("Double Socrates, cannot identify correct Socrates");
                         }
-                        player = new Socrates(this, new Vector(i, j), new Vector(0, 0), null);
+                        player = new Socrates(this, new Vector(i, j), new Vector(0, 0), oi, null);
                         break;
                     case Dictionary.PILL:
                     default:
-                        pillList.add(new Pill(this, new Vector(i, j), null));
+                        pillList.add(new Pill(this, new Vector(i, j), oi, null));
                         break;
                 }
                 j++;

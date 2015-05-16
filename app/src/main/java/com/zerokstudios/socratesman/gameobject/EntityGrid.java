@@ -18,13 +18,13 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
     //private static final Vector[] DIRECTIONS = {new Vector(0,0), new Vector(0,1), new Vector(1,1), new Vector(1,0), new Vector(1,-1), new Vector(0,-1), new Vector(-1,-1), new Vector(-1,0), new Vector(-1,1)};
 
     @SuppressWarnings("unchecked") //arraylist must accept type SE thus it is safe to cast to SE
-    public EntityGrid(Map aMap, ArrayList<SE> aEntities) {
+    public EntityGrid(Map aMap, ArrayList<SE> aEntities, SE tribute) {
         map = aMap;
         entities = (SE[][])(new StaticEntity[map.getGridDimensions().X][map.getGridDimensions().Y]);
         for (SE entity : aEntities) {
             entities[toGridPosition(entity.getPosition()).X][toGridPosition(entity.getPosition()).Y] = entity;
         }
-        TYPE = aEntities.get(0).getType();
+        TYPE = tribute.getType();
     }
 
     public SE getEntity(Vector position) {

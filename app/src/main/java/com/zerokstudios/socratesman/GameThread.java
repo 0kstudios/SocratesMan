@@ -4,7 +4,7 @@ package com.zerokstudios.socratesman;
  * Created by Kevin on 5/15/2015.
  */
 public class GameThread extends Thread {
-    private static final long TICK_TIME = 1000 / 60;
+    private static final int TICK_TIME = 1000 / 60;
     private final GameController gameController;
     private boolean run;
 
@@ -25,8 +25,9 @@ public class GameThread extends Thread {
             synchronized (gameController) {
                 gameController.tick(gameClock.getElapsed());
             }
+            int waitTime = TICK_TIME - gameClock.peekElapsed();
             try {
-                sleep(TICK_TIME);
+                sleep((waitTime > 0) ? waitTime : 0);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

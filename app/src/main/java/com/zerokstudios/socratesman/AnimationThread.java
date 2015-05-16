@@ -12,7 +12,7 @@ public class AnimationThread<SV extends SurfaceView & SurfaceHolder.Callback> ex
     private final SV surfaceView;
     private boolean run;
 
-    private static final long TICK_TIME = 1000/60;
+    private static final int TICK_TIME = 1000/60;
 
     public AnimationThread(SurfaceHolder aSurfaceHolder, SV aSurfaceView) {
         surfaceHolder = aSurfaceHolder;
@@ -27,6 +27,8 @@ public class AnimationThread<SV extends SurfaceView & SurfaceHolder.Callback> ex
     @Override
     public void run() {
         Canvas canvas = null;
+        GameClock gameClock = new GameClock();
+        gameClock.start();
         while (run) {
             try {
                 canvas = surfaceHolder.lockCanvas();
@@ -40,8 +42,9 @@ public class AnimationThread<SV extends SurfaceView & SurfaceHolder.Callback> ex
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
             }
+            int waitTime = TICK_TIME - gameClock.getElapsed();
             try {
-                sleep(TICK_TIME);
+                sleep((waitTime > 0) ? waitTime : 0);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

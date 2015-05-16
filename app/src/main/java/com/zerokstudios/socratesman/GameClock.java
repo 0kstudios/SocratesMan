@@ -20,6 +20,10 @@ public class GameClock {
         return (int) elapsed;
     }
 
+    public int peekElapsed() {
+        return (int) (Calendar.getInstance().getTimeInMillis() - millitime);
+    }
+
     public void start() {
         millitime = Calendar.getInstance().getTimeInMillis();
     }
