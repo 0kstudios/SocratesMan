@@ -16,9 +16,11 @@ import java.util.ArrayList;
 public class GameController {
     private Map map;
     private GameThread gameThread;
+    private OI oi;
 
     public GameController() {
         gameThread = new GameThread(this);
+        oi = new OI();
     }
 
     public boolean setMap(Vector gridDimensions, Vector panelDimensions) {
@@ -29,6 +31,14 @@ public class GameController {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public void setOi(OI aOi) {
+        oi = aOi;
+    }
+
+    public OI getOi() {
+        return oi;
     }
 
     public Map getMap() {
@@ -52,6 +62,8 @@ public class GameController {
         Socrates socrates = map.getSocrates();
         if (socrates.isDead()) {
             endGame();
+        } else if (oi.get(OI.Control.PAUSE)) {
+            pause();
         } else {
             EntityGrid<Wall> walls = map.getWalls();
             if (walls.isColliding(socrates, time)) {

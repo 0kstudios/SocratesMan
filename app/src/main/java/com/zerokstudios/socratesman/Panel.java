@@ -33,9 +33,9 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        Map map = MainActivity.GAME_CONTROLLER.getMap();
         clear(canvas);
         canvas.drawBitmap(droid, 10, 10, null);
-        Map map = MainActivity.GAME_CONTROLLER.getMap();
         map.getWalls().draw();
         map.getSocrates().draw();
         for (Ghost ghost : map.getGhosts()) {

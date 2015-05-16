@@ -3,6 +3,7 @@ package com.zerokstudios.socratesman.gameobject;
 import android.graphics.Bitmap;
 
 import com.zerokstudios.socratesman.Map;
+import com.zerokstudios.socratesman.OI;
 import com.zerokstudios.socratesman.Vector;
 
 /**
@@ -15,15 +16,18 @@ public abstract class Entity implements Collidable {
 
     private Map map;
 
+    protected OI oi;
+
     private Bitmap image;
 
-    public Entity(Map aMap, Vector aPosition, Vector aVelocity, Bitmap aImage) {
+    public Entity(Map aMap, Vector aPosition, Vector aVelocity, OI aOi, Bitmap aImage) {
         if (aPosition == null) {
             aPosition = new Vector(0, 0);
         }
         if (aVelocity == null) {
             aVelocity = new Vector(0, 0);
         }
+        oi = aOi;
         map = aMap;
         position = aPosition;
         velocity = aVelocity;
@@ -60,6 +64,10 @@ public abstract class Entity implements Collidable {
         return position;
     }
 
+    public Vector nextPosition(int time) {
+        return position.sum(getVelocity().scale(map.getTileRadius() * time));
+    }
+
     public void teleport(Vector aPosition) {
         position = aPosition;
     }
@@ -68,9 +76,10 @@ public abstract class Entity implements Collidable {
         //pathfinding here
     }
 
-    public void tick(long time) {
+    public abstract void update();
 
-
+    public void tick(int time) {
+        position = nextPosition(time);
     }
 
     public void draw() {
@@ -79,6 +88,6 @@ public abstract class Entity implements Collidable {
 
     @Override
     public boolean isColliding(Entity entity, int time) {
-        return position.sum(getVelocity().scale(map.getTileRadius() * time)).difference(entity.getPosition().sum(entity.getVelocity().scale(map.getTileRadius() * time))).toSquareScalar() < map.getSquareTileDiameter() + 1;
+        return nextPosition(time).difference(entity.nextPosition(time)).toSquareScalar() < map.getSquareTileDiameter() + 1;
     }
 }

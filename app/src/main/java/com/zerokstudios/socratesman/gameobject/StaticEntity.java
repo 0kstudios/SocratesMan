@@ -3,6 +3,7 @@ package com.zerokstudios.socratesman.gameobject;
 import android.graphics.Bitmap;
 
 import com.zerokstudios.socratesman.Map;
+import com.zerokstudios.socratesman.OI;
 import com.zerokstudios.socratesman.Vector;
 import com.zerokstudios.socratesman.gameobject.Entity;
 
@@ -11,8 +12,8 @@ import com.zerokstudios.socratesman.gameobject.Entity;
  */
 public abstract class StaticEntity extends Entity {
 
-    public StaticEntity(Map aMap, Vector aPosition, Bitmap aImage) {
-        super(aMap, aPosition, null, aImage);
+    public StaticEntity(Map aMap, Vector aPosition, OI aOi, Bitmap aImage) {
+        super(aMap, aPosition, null, aOi, aImage);
     }
 
     @Override
