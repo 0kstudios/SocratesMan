@@ -24,7 +24,8 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
         for (SE entity : aEntities) {
             entities[toGridPosition(entity.getPosition()).X][toGridPosition(entity.getPosition()).Y] = entity;
         }
-        TYPE = tribute.getType();
+
+        TYPE = tribute.getType(); // tribute properties completely null, only used to obtain type
     }
 
     public SE getEntity(Vector position) {

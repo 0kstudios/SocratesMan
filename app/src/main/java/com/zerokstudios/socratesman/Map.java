@@ -23,12 +23,17 @@ public class Map {
     private int tileRadius;
     private Vector gridDimensions;
     private Vector pixelDimensions;
+
     private EntityGrid<Wall> walls;
     private EntityGrid<Pill> pills;
     private ArrayList<Ghost> ghosts;
     private Socrates socrates;
 
+    private int score;
+
     public Map(Vector aGridDimensions, Vector aPixelDimensions, OI oi) throws SocratesNotFoundException {
+        score = 0;
+
         gridDimensions = aGridDimensions;
         setPixelDimensions(aPixelDimensions);
 
@@ -62,12 +67,11 @@ public class Map {
             i++;
         }
 
-
         if (player == null) {
             throw new SocratesNotFoundException("Socrates does not exist");
         }
-        walls = new EntityGrid<Wall>(this, wallList);
-        pills = new EntityGrid<>(this, pillList);
+        walls = new EntityGrid<Wall>(this, wallList, new Wall(null, null, null, null));
+        pills = new EntityGrid<>(this, pillList, new Pill(null, null, null, null));
         ghosts = ghostList;
         socrates = player;
     }
@@ -103,6 +107,14 @@ public class Map {
         }
 
         pixelDimensions = new Vector(gridDimensions.X * tileRadius * 2, gridDimensions.Y * tileRadius * 2);
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void incrementScore(int s) {
+        score += s;
     }
 
     public EntityGrid<Wall> getWalls() {

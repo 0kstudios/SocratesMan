@@ -14,7 +14,7 @@ public abstract class Entity implements Collidable {
     private Vector velocity; // measured in tileRadius / ms
     private boolean alive;
 
-    private Map map;
+    protected Map map;
 
     protected OI oi;
 
@@ -60,7 +60,6 @@ public abstract class Entity implements Collidable {
     }
 
     public Vector getPosition() {
-
         return position;
     }
 

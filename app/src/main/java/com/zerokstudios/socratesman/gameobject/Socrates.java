@@ -23,7 +23,15 @@ public class Socrates extends Entity {
 
     @Override
     public void onCollide(CollideEvent event) {
-
+        switch (event.TYPE) {
+            case WALL:
+                setVelocity(new Vector(0, 0));
+                break;
+            case GHOST:
+                setVelocity(new Vector(0, 0));
+                kill();
+                break;
+        }
     }
 
     @Override

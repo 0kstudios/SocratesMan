@@ -18,7 +18,10 @@ public class Ghost extends Entity {
 
     @Override
     public void onCollide(CollideEvent event) {
-
+        switch (event.TYPE) {
+            case WALL:
+                setVelocity(new Vector(0, 0));
+        }
     }
 
     @Override
