@@ -70,6 +70,7 @@ public class GameController {
             EntityGrid<Pill> pills = map.getPills();
 
             socrates.update();
+            oi.clear();
 
             if (walls.isColliding(socrates, time)) {
                 socrates.onCollide(new CollideEvent(walls));
