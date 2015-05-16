@@ -4,7 +4,7 @@ package com.zerokstudios.socratesman;
  * Created by Kevin on 5/12/2015.
  */
 public class Vector {
-    //exposed yet immutable to allow the creation of ordered pair tuple values
+    //exposed yet immutable to allow easy access to ordered pair tuple values
     public final int X;
     public final int Y;
 
@@ -17,12 +17,25 @@ public class Vector {
         return new Vector(X - other.X, Y - other.Y);
     }
 
+    public Vector sum(Vector other) {
+        return new Vector(X + other.X, Y + other.Y);
+    }
+
+    public Vector scale(int millisec) {
+        return new Vector(X * millisec, Y * millisec);
+    }
+
     @Override
     public boolean equals(Object o) {
         return o instanceof Vector && ((Vector) o).X == X && ((Vector) o).Y == Y;
     }
 
     public int toSquareScalar() {
-        return X*X + Y*Y;
+        return X * X + Y * Y;
+    }
+
+    @Override
+    public String toString() {
+        return "<" + X + "," + Y + ">";
     }
 }

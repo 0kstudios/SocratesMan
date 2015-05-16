@@ -1,4 +1,4 @@
-package com.zerokstudios.socratesman;
+package com.zerokstudios.socratesman.gameobject;
 
 /**
  * Created by Kevin on 5/12/2015.

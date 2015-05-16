@@ -1,4 +1,7 @@
-package com.zerokstudios.socratesman;
+package com.zerokstudios.socratesman.gameobject;
+
+import com.zerokstudios.socratesman.Map;
+import com.zerokstudios.socratesman.Vector;
 
 import java.util.ArrayList;
 
@@ -7,6 +10,8 @@ import java.util.ArrayList;
  */
 public class EntityGrid<SE extends StaticEntity> implements Collidable {
     private Map map;
+
+    private final GameObjectType TYPE;
 
     private SE[][] entities;
 
@@ -19,6 +24,7 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
         for (SE entity : aEntities) {
             entities[toGridPosition(entity.getPosition()).X][toGridPosition(entity.getPosition()).Y] = entity;
         }
+        TYPE = aEntities.get(0).getType();
     }
 
     public SE getEntity(Vector position) {
@@ -30,8 +36,13 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
     }
 
     @Override
-    public boolean isColliding(Entity entity) {
-        return entity.isColliding(getEntity(entity.getPosition()));
+    public GameObjectType getType() {
+        return TYPE;
+    }
+
+    @Override
+    public boolean isColliding(Entity entity, int time) {
+        return entity.isColliding(getEntity(entity.getPosition()), time);
     }
 
     @Override
@@ -56,6 +67,24 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
 //        int y = gridposition.Y;
 //        return x > -1 && x < entities.length && y > -1 && y < entities[0].length;
 //    }
+
+    public void draw() {
+        for (SE[] ses : entities) {
+            for (SE se : ses) {
+                if (se != null) {
+                    se.draw();
+                }
+            }
+        }
+    }
+
+    public void garbageCollect() {
+
+    }
+
+    public void garbageCollect(Vector position) {
+
+    }
 
     private Vector toGridPosition(Vector position) {
         return new Vector(position.X/(map.getTileRadius()*2), position.Y/(map.getTileRadius()*2));

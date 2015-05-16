@@ -5,17 +5,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.zerokstudios.socratesman.gameobject.Ghost;
 
 /**
  * Created by Kevin on 5/12/2015.
  */
 public class Panel extends SurfaceView implements SurfaceHolder.Callback {
-
     Bitmap droid;
+    private Vector panelDimensions;
     private AnimationThread<Panel> animationThread;
 
     public Panel(Context context, AttributeSet attributeSet) {
@@ -34,6 +35,12 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     protected void onDraw(Canvas canvas) {
         clear(canvas);
         canvas.drawBitmap(droid, 10, 10, null);
+        Map map = MainActivity.GAME_CONTROLLER.getMap();
+        map.getWalls().draw();
+        map.getSocrates().draw();
+        for (Ghost ghost : map.getGhosts()) {
+            ghost.draw();
+        }
     }
 
     private void clear(Canvas canvas) {
@@ -42,8 +49,11 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        panelDimensions = new Vector(getWidth(), getHeight());
+        MainActivity.GAME_CONTROLLER.setMap(new Vector(5, 5), panelDimensions);
         animationThread.setRunning(true);
         animationThread.start();
+        MainActivity.GAME_CONTROLLER.start();
     }
 
     @Override
@@ -55,9 +65,11 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder holder) {
         boolean retry = true;
         animationThread.setRunning(false);
+        MainActivity.GAME_CONTROLLER.pause();
         while (retry) {
             try {
                 animationThread.join();
+                MainActivity.GAME_CONTROLLER.join();
                 retry = false;
             } catch (InterruptedException e) {
 

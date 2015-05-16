@@ -1,13 +1,16 @@
-package com.zerokstudios.socratesman;
+package com.zerokstudios.socratesman.gameobject;
 
 import android.graphics.Bitmap;
+
+import com.zerokstudios.socratesman.Map;
+import com.zerokstudios.socratesman.Vector;
 
 /**
  * Created by Kevin on 5/12/2015.
  */
-public abstract class Entity implements Collidable{
-    private Vector position;
-    private Vector velocity;
+public abstract class Entity implements Collidable {
+    private Vector position; // measured in pixels
+    private Vector velocity; // measured in tileRadius / ms
     private boolean alive;
 
     private Map map;
@@ -65,7 +68,8 @@ public abstract class Entity implements Collidable{
         //pathfinding here
     }
 
-    public void tick() {
+    public void tick(long time) {
+
 
     }
 
@@ -74,7 +78,7 @@ public abstract class Entity implements Collidable{
     }
 
     @Override
-    public boolean isColliding(Entity entity) {
-        return position.difference(entity.getPosition()).toSquareScalar() < map.getSquareTileDiameter()+1;
+    public boolean isColliding(Entity entity, int time) {
+        return position.sum(getVelocity().scale(map.getTileRadius() * time)).difference(entity.getPosition().sum(entity.getVelocity().scale(map.getTileRadius() * time))).toSquareScalar() < map.getSquareTileDiameter() + 1;
     }
 }

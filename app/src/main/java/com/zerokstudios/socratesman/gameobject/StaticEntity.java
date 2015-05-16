@@ -1,6 +1,10 @@
-package com.zerokstudios.socratesman;
+package com.zerokstudios.socratesman.gameobject;
 
 import android.graphics.Bitmap;
+
+import com.zerokstudios.socratesman.Map;
+import com.zerokstudios.socratesman.Vector;
+import com.zerokstudios.socratesman.gameobject.Entity;
 
 /**
  * Created by Kevin on 5/12/2015.

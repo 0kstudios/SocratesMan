@@ -8,11 +8,11 @@ import android.view.SurfaceView;
  * Created by Kevin on 5/12/2015.
  */
 public class AnimationThread<SV extends SurfaceView & SurfaceHolder.Callback> extends Thread {
-    private SurfaceHolder surfaceHolder;
-    private SV surfaceView;
+    private final SurfaceHolder surfaceHolder;
+    private final SV surfaceView;
     private boolean run;
 
-    public static final long TICK_TIME = 1000/60;
+    private static final long TICK_TIME = 1000/60;
 
     public AnimationThread(SurfaceHolder aSurfaceHolder, SV aSurfaceView) {
         surfaceHolder = aSurfaceHolder;

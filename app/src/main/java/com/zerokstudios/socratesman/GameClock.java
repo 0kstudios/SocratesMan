@@ -1,12 +1,26 @@
 package com.zerokstudios.socratesman;
 
-import java.util.Timer;
+import java.util.Calendar;
 
 /**
  * Created by Kevin on 5/12/2015.
  */
 public class GameClock {
-    private static Timer clock = new Timer();
-    private GameClock(){} // not to be instantiated
+    private long millitime;
 
+    public GameClock() {
+    }
+
+    public int getElapsed() {
+        long current = Calendar.getInstance().getTimeInMillis();
+        long elapsed = current - millitime;
+
+        millitime = current;
+
+        return (int) elapsed;
+    }
+
+    public void start() {
+        millitime = Calendar.getInstance().getTimeInMillis();
+    }
 }
