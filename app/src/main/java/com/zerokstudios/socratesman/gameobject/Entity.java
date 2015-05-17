@@ -19,7 +19,7 @@ public abstract class Entity implements Collidable {
 
     protected OI oi;
 
-    private Bitmap bitmap;
+    protected Bitmap bitmap;
 
     public Entity(Map aMap, Vector aPosition, Vector aVelocity, OI aOi, Bitmap aImage) {
         if (aPosition == null) {
@@ -92,7 +92,7 @@ public abstract class Entity implements Collidable {
     public boolean isColliding(Entity entity, int time) {
         if (entity != null) {
             Vector difference = nextPosition(time).difference(entity.nextPosition(time)).abs();
-            int collisionRadius = map.getTileDiameter()-8;
+            int collisionRadius = map.getTileDiameter();
             return difference.X < collisionRadius || difference.Y < collisionRadius;
         }
         return false;

@@ -7,14 +7,14 @@ import android.view.SurfaceView;
 /**
  * Created by Kevin on 5/12/2015.
  */
-public class AnimationThread<SV extends SurfaceView & SurfaceHolder.Callback> extends Thread {
+public class AnimationThread extends Thread {
     private final SurfaceHolder surfaceHolder;
-    private final SV surfaceView;
+    private final Panel surfaceView;
     private boolean run;
 
-    private static final int TICK_TIME = 1000/15;
+    private static final int TICK_TIME = 1000/30;
 
-    public AnimationThread(SurfaceHolder aSurfaceHolder, SV aSurfaceView) {
+    public AnimationThread(SurfaceHolder aSurfaceHolder, Panel aSurfaceView) {
         surfaceHolder = aSurfaceHolder;
         surfaceView = aSurfaceView;
         run = false;
@@ -33,8 +33,9 @@ public class AnimationThread<SV extends SurfaceView & SurfaceHolder.Callback> ex
             try {
                 canvas = surfaceHolder.lockCanvas(null);
                 synchronized (surfaceHolder) {
-                    surfaceView.draw(canvas);
+                    surfaceView.redraw(canvas);
                 }
+//                surfaceView.invalidate();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {

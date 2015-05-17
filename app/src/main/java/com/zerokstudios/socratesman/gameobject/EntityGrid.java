@@ -11,11 +11,10 @@ import java.util.ArrayList;
  * Created by Kevin on 5/12/2015.
  */
 public class EntityGrid<SE extends StaticEntity> implements Collidable {
+    private static final Vector[] DIRECTIONS = {new Vector(0, 0), new Vector(0, 1), new Vector(1, 1), new Vector(1, 0), new Vector(1, -1), new Vector(0, -1), new Vector(-1, -1), new Vector(-1, 0), new Vector(-1, 1)};
     private final GameObjectType TYPE;
     private Map map;
     private SE[][] entities;
-
-    //private static final Vector[] DIRECTIONS = {new Vector(0,0), new Vector(0,1), new Vector(1,1), new Vector(1,0), new Vector(1,-1), new Vector(0,-1), new Vector(-1,-1), new Vector(-1,0), new Vector(-1,1)};
 
     @SuppressWarnings("unchecked") //arraylist must accept type SE thus it is safe to cast to SE
     public EntityGrid(Map aMap, ArrayList<SE> aEntities, SE tribute) {
@@ -47,8 +46,16 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
     public boolean isColliding(Entity entity, int time) {
         //System.out.println(entity.getType() + " " + entity.nextPosition(time));
         //System.out.println(getEntity(entity.nextPosition(time)));
-        //return entity.isColliding(collisionGetEntity(entity.nextPosition(time), entity.getVelocity()), time); //testing code here for nicer collisions
+//        return entity.isColliding(collisionGetEntity(entity.nextPosition(time), entity.getVelocity()), time); //testing code here for nicer collisions
+
         return entity.isColliding(getEntity(entity.nextPosition(time)), time);
+
+//        for (Entity e : getSurroundings(entity.nextPosition(time))) {
+//            if (e != null && e.isColliding(entity, time)) {
+//                return true;
+//            }
+//        }
+//        return false;
     }
 
     @Override
@@ -68,24 +75,6 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
         return entities[roundedCenterPosition.X][roundedCenterPosition.Y];
     }
 
-//    private ArrayList<SE> getSurroundings(Vector position) {
-//        position = toGridPosition(position);
-//        ArrayList<SE> surroundings = new ArrayList<SE>();
-//        for (Vector direction : DIRECTIONS) {
-//            Vector target = new Vector(position.X + direction.X, position.Y + direction.Y) ;
-//            if (isInBounds(target)) {
-//                surroundings.add(getEntity(target));
-//            }
-//        }
-//        return surroundings;
-//    }
-//
-//    private boolean isInBounds(Vector gridposition) {
-//        int x = gridposition.X;
-//        int y = gridposition.Y;
-//        return x > -1 && x < entities.length && y > -1 && y < entities[0].length;
-//    }
-
     public void draw(Canvas canvas) {
         for (SE[] ses : entities) {
             for (SE se : ses) {
@@ -94,10 +83,6 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
                 }
             }
         }
-    }
-
-    public void garbageCollect() {
-
     }
 
     private void garbageCollect(Vector position) {

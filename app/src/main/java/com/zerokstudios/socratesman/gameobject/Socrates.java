@@ -36,7 +36,13 @@ public class Socrates extends Entity {
         }
     }
 
-    private final Vector speed = new Vector(1,1);
+//    @Override
+//    public void draw(Canvas canvas) {
+//        Vector drawLocation = getPosition().sum(map.getTileRadiusVector().scale(-1));
+//        canvas.drawBitmap(bitmap, drawLocation.X, drawLocation.Y, null);
+//    }
+
+    private final Vector speed = new Vector(3,3);
 
     @Override
     public void update() {
