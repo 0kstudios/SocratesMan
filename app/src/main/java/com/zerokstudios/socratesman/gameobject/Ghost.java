@@ -21,6 +21,10 @@ public class Ghost extends Entity {
         switch (event.TYPE) {
             case WALL:
                 setVelocity(new Vector(0, 0));
+                break;
+            case SOCRATES:
+                // set position back to original
+                break;
         }
     }
 

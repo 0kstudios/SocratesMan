@@ -1,5 +1,9 @@
 package com.zerokstudios.socratesman;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.zerokstudios.socratesman.gameobject.EntityGrid;
 import com.zerokstudios.socratesman.gameobject.Ghost;
 import com.zerokstudios.socratesman.gameobject.Pill;
@@ -23,15 +27,14 @@ public class Map {
     private int tileRadius;
     private Vector gridDimensions;
     private Vector pixelDimensions;
-
+    private Images images;
     private EntityGrid<Wall> walls;
     private EntityGrid<Pill> pills;
     private ArrayList<Ghost> ghosts;
     private Socrates socrates;
-
     private int score;
 
-    public Map(Vector aGridDimensions, Vector aPixelDimensions, OI oi) throws SocratesNotFoundException {
+    public Map(Vector aGridDimensions, Vector aPixelDimensions, OI oi, Resources resources) throws SocratesNotFoundException {
         score = 0;
 
         gridDimensions = aGridDimensions;
@@ -41,25 +44,34 @@ public class Map {
         ArrayList<Pill> pillList = new ArrayList<Pill>();
         ArrayList<Ghost> ghostList = new ArrayList<Ghost>();
         Socrates player = null;
-        int i = 0, j = 0;
+
+        images = new Images();
+        images.setSocrates(BitmapFactory.decodeResource(resources, R.drawable.socrates));
+        images.setGhost(BitmapFactory.decodeResource(resources, R.drawable.ghost));
+        images.setWall(BitmapFactory.decodeResource(resources, R.drawable.wall));
+        images.setPill(BitmapFactory.decodeResource(resources, R.drawable.pill));
+        images.resizeToTile(getTileRadius() * 2);
+
+        int i = 0, j;
         for (char[] chA : generateMap(aGridDimensions)) {
+            j = 0;
             for (char ch : chA) {
                 switch (ch) {
                     case Dictionary.WALL:
-                        wallList.add(new Wall(this, new Vector(i, j), oi, null));
+                        wallList.add(new Wall(this, new Vector(j, i).scale(getTileDiameter()), oi, images.getWall()));
                         break;
                     case Dictionary.GHOST:
-                        ghostList.add(new Ghost(this, new Vector(i, j), new Vector(0, 0), oi, null));
+                        ghostList.add(new Ghost(this, new Vector(j, i).scale(getTileDiameter()), new Vector(0, 0), oi, images.getGhost()));
                         break;
                     case Dictionary.SOCRATES:
                         if (player != null) {
                             throw new SocratesNotFoundException("Double Socrates, cannot identify correct Socrates");
                         }
-                        player = new Socrates(this, new Vector(i, j), new Vector(0, 0), oi, null);
+                        player = new Socrates(this, new Vector(j, i).scale(getTileDiameter()), new Vector(0, 0), oi, images.getSocrates());
                         break;
                     case Dictionary.PILL:
                     default:
-                        pillList.add(new Pill(this, new Vector(i, j), oi, null));
+                        pillList.add(new Pill(this, new Vector(j, i).scale(getTileDiameter()), oi, images.getPill()));
                         break;
                 }
                 j++;
@@ -71,7 +83,7 @@ public class Map {
             throw new SocratesNotFoundException("Socrates does not exist");
         }
         walls = new EntityGrid<Wall>(this, wallList, new Wall(null, null, null, null));
-        pills = new EntityGrid<>(this, pillList, new Pill(null, null, null, null));
+        pills = new EntityGrid<Pill>(this, pillList, new Pill(null, null, null, null));
         ghosts = ghostList;
         socrates = player;
     }
@@ -82,6 +94,10 @@ public class Map {
 
     public int getTileRadius() {
         return tileRadius;
+    }
+
+    public int getTileDiameter() {
+        return tileRadius * 2;
     }
 
     public int getSquareTileDiameter() {
@@ -131,6 +147,53 @@ public class Map {
 
     public Socrates getSocrates() {
         return socrates;
+    }
+
+    private static class Images {
+        private Bitmap socrates, ghost, wall, pill;
+
+        public Bitmap getSocrates() {
+            return socrates;
+        }
+
+        public void setSocrates(Bitmap aSocrates) {
+            socrates = aSocrates;
+        }
+
+        public Bitmap getGhost() {
+            return ghost;
+        }
+
+        public void setGhost(Bitmap aGhost) {
+            ghost = aGhost;
+        }
+
+        public Bitmap getWall() {
+            return wall;
+        }
+
+        public void setWall(Bitmap aWall) {
+            wall = aWall;
+        }
+
+        public Bitmap getPill() {
+            return pill;
+        }
+
+        public void setPill(Bitmap aPill) {
+            pill = aPill;
+        }
+
+        public void resizeToTile(int size) {
+            socrates = resizeBitmapToTile(socrates, size);
+            ghost = resizeBitmapToTile(ghost, size);
+            wall = resizeBitmapToTile(wall, size);
+            pill = resizeBitmapToTile(pill, size);
+        }
+
+        private Bitmap resizeBitmapToTile(Bitmap bitmap, int size) {
+            return Bitmap.createScaledBitmap(bitmap, size, size, true);
+        }
     }
 
     private static class Dictionary {

@@ -5,13 +5,16 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.zerokstudios.socratesman.gameobject.SocratesNotFoundException;
 
 
 public class MainActivity extends ActionBarActivity {
     private Panel panel;
-    public static final GameController GAME_CONTROLLER = new GameController();;
+
+    public static final GameController GAME_CONTROLLER = new GameController();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +28,7 @@ public class MainActivity extends ActionBarActivity {
 //        getWindowManager().getDefaultDisplay().getMetrics(metrics);
 //        Vector screenDimensions = new Vector(metrics.widthPixels, metrics.heightPixels);
 
-        panel = ((Panel)findViewById(R.id.mainPanel));
-
+        panel = (Panel)findViewById(R.id.mainPanel);
     }
 
     @Override
@@ -49,5 +51,23 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void gameControlHandler(View view) {
+        OI oi = GAME_CONTROLLER.getOi();
+        switch (view.getId()) {
+            case R.id.bUp:
+                oi.set(OI.Control.UP, true);
+                break;
+            case R.id.bDown:
+                oi.set(OI.Control.DOWN, true);
+                break;
+            case R.id.bLeft:
+                oi.set(OI.Control.LEFT, true);
+                break;
+            case R.id.bRight:
+                oi.set(OI.Control.RIGHT, true);
+                break;
+        }
     }
 }

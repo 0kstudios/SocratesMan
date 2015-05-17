@@ -2,7 +2,6 @@ package com.zerokstudios.socratesman;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -15,7 +14,7 @@ import com.zerokstudios.socratesman.gameobject.Ghost;
  * Created by Kevin on 5/12/2015.
  */
 public class Panel extends SurfaceView implements SurfaceHolder.Callback {
-    Bitmap droid;
+    Bitmap background;
     private Vector panelDimensions;
     private AnimationThread<Panel> animationThread;
 
@@ -23,34 +22,34 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
         super(context, attributeSet);
         getHolder().addCallback(this);
         animationThread = new AnimationThread<Panel>(getHolder(), this);
-
-        initDrawables();
-    }
-
-    private void initDrawables() {
-        droid = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         Map map = MainActivity.GAME_CONTROLLER.getMap();
         clear(canvas);
-        canvas.drawBitmap(droid, 10, 10, null);
-        map.getWalls().draw();
-        map.getSocrates().draw();
+        map.getPills().draw(canvas);
+        map.getSocrates().draw(canvas);
         for (Ghost ghost : map.getGhosts()) {
-            ghost.draw();
+            ghost.draw(canvas);
         }
     }
 
     private void clear(Canvas canvas) {
         canvas.drawColor(Color.DKGRAY);
+        canvas.drawBitmap(background, 0, 0, null);
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         panelDimensions = new Vector(getWidth(), getHeight());
-        MainActivity.GAME_CONTROLLER.setMap(new Vector(5, 5), panelDimensions);
+        MainActivity.GAME_CONTROLLER.setMap(new Vector(5, 5), panelDimensions, getResources());
+
+        background = Bitmap.createBitmap(panelDimensions.X, panelDimensions.Y, Bitmap.Config.ARGB_8888);
+        Canvas backgroundCanvas = new Canvas(background);
+        Map map = MainActivity.GAME_CONTROLLER.getMap();
+        map.getWalls().draw(backgroundCanvas);
+
         animationThread.setRunning(true);
         animationThread.start();
         MainActivity.GAME_CONTROLLER.start();

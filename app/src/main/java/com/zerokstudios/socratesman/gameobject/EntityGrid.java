@@ -1,5 +1,7 @@
 package com.zerokstudios.socratesman.gameobject;
 
+import android.graphics.Canvas;
+
 import com.zerokstudios.socratesman.Map;
 import com.zerokstudios.socratesman.Vector;
 
@@ -43,12 +45,21 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
 
     @Override
     public boolean isColliding(Entity entity, int time) {
-        return entity.isColliding(getEntity(entity.getPosition()), time);
+        Entity entityGridObject = getEntity(entity.nextPosition(time));
+        if (entityGridObject == null) {
+            return true;
+        }
+        return entity.isColliding(getEntity(entity.nextPosition(time)), time);
     }
 
     @Override
     public void onCollide(CollideEvent event) {
-
+        if (event.collisionMember instanceof Entity) {
+            Entity entityGridObject = getEntity(((Entity) event.collisionMember).nextPosition(event.elapsedTime));
+            if (entityGridObject != null) {
+                entityGridObject.onCollide(event);
+            }
+        }
     }
 
 //    private ArrayList<SE> getSurroundings(Vector position) {
@@ -69,11 +80,11 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
 //        return x > -1 && x < entities.length && y > -1 && y < entities[0].length;
 //    }
 
-    public void draw() {
+    public void draw(Canvas canvas) {
         for (SE[] ses : entities) {
             for (SE se : ses) {
                 if (se != null) {
-                    se.draw();
+                    se.draw(canvas);
                 }
             }
         }
@@ -88,6 +99,6 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
     }
 
     private Vector toGridPosition(Vector position) {
-        return new Vector(position.X/(map.getTileRadius()*2), position.Y/(map.getTileRadius()*2));
+        return new Vector(position.X/(map.getTileDiameter()), position.Y/(map.getTileDiameter()));
     }
 }

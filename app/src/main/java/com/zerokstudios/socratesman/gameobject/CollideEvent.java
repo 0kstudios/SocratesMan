@@ -9,12 +9,12 @@ import java.util.ArrayList;
  */
 public class CollideEvent {
     public final GameObjectType TYPE;
+    public final Collidable collisionMember;
+    public final int elapsedTime;
 
-    public CollideEvent(Entity collisionMember){
-        TYPE = collisionMember.getType();
-    }
-
-    public CollideEvent(EntityGrid collisionMember) {
-        TYPE = collisionMember.getType();
+    public CollideEvent(Collidable aCollisionMember, int time){
+        TYPE = aCollisionMember.getType();
+        collisionMember = aCollisionMember;
+        elapsedTime = time;
     }
 }

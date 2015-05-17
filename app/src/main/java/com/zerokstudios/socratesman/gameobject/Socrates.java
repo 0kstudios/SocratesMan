@@ -30,12 +30,15 @@ public class Socrates extends Entity {
             case GHOST:
                 setVelocity(new Vector(0, 0));
                 kill();
+                //set position back to original
                 break;
         }
     }
 
+    private final Vector speed = new Vector(1,1);
+
     @Override
     public void update() {
-        setVelocity(new Vector((oi.get(OI.Control.LEFT) ? -1 : 0) + (oi.get(OI.Control.RIGHT) ? 1 : 0), (oi.get(OI.Control.UP) ? -1 : 0) + (oi.get(OI.Control.DOWN) ? 1 : 0)));
+        setVelocity(new Vector(((oi.get(OI.Control.LEFT) ? -speed.X : getVelocity().X) + (oi.get(OI.Control.RIGHT) ? speed.X : getVelocity().X)) / 2, ((oi.get(OI.Control.UP) ? -speed.Y : getVelocity().Y) + (oi.get(OI.Control.DOWN) ? speed.Y : getVelocity().Y)) / 2));
     }
 }

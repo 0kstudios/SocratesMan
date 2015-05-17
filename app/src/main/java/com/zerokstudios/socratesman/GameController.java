@@ -1,5 +1,7 @@
 package com.zerokstudios.socratesman;
 
+import android.content.res.Resources;
+
 import com.zerokstudios.socratesman.gameobject.CollideEvent;
 import com.zerokstudios.socratesman.gameobject.EntityGrid;
 import com.zerokstudios.socratesman.gameobject.Ghost;
@@ -23,9 +25,9 @@ public class GameController {
         oi = new OI();
     }
 
-    public boolean setMap(Vector gridDimensions, Vector panelDimensions) {
+    public boolean setMap(Vector gridDimensions, Vector panelDimensions, Resources resources) {
         try {
-            map = new Map(gridDimensions, panelDimensions, oi); // make sure to get map dimension options from user
+            map = new Map(gridDimensions, panelDimensions, oi, resources); // make sure to get map dimension options from user
             return true;
         } catch (SocratesNotFoundException e) {
             e.printStackTrace();
@@ -76,22 +78,22 @@ public class GameController {
             oi.clear();
 
             if (walls.isColliding(socrates, time)) {
-                socrates.onCollide(new CollideEvent(walls));
-                walls.onCollide(new CollideEvent(socrates));
+                socrates.onCollide(new CollideEvent(walls, time));
+                walls.onCollide(new CollideEvent(socrates, time));
             }
             for (Ghost ghost : ghosts) {
                 if (socrates.isColliding(ghost, time)) {
-                    socrates.onCollide(new CollideEvent(ghost));
-                    ghost.onCollide(new CollideEvent(socrates));
+                    socrates.onCollide(new CollideEvent(ghost, time));
+                    ghost.onCollide(new CollideEvent(socrates, time));
                 }
                 if (walls.isColliding(ghost, time)) {
-                    ghost.onCollide(new CollideEvent(walls));
-                    walls.onCollide(new CollideEvent(ghost));
+                    ghost.onCollide(new CollideEvent(walls, time));
+                    walls.onCollide(new CollideEvent(ghost, time));
                 }
             }
             if (pills.isColliding(socrates, time)) {
-                socrates.onCollide(new CollideEvent(pills));
-                pills.onCollide(new CollideEvent(socrates));
+                socrates.onCollide(new CollideEvent(pills, time));
+                pills.onCollide(new CollideEvent(socrates, time));
             }
 
             socrates.tick(time);

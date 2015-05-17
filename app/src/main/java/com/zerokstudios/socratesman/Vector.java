@@ -21,8 +21,8 @@ public class Vector {
         return new Vector(X + other.X, Y + other.Y);
     }
 
-    public Vector scale(int millisec) {
-        return new Vector(X * millisec, Y * millisec);
+    public Vector scale(double factor) {
+        return new Vector((int)(X * factor), (int)(Y * factor));
     }
 
     @Override

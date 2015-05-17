@@ -12,7 +12,7 @@ public class AnimationThread<SV extends SurfaceView & SurfaceHolder.Callback> ex
     private final SV surfaceView;
     private boolean run;
 
-    private static final int TICK_TIME = 1000/60;
+    private static final int TICK_TIME = 1000/30;
 
     public AnimationThread(SurfaceHolder aSurfaceHolder, SV aSurfaceView) {
         surfaceHolder = aSurfaceHolder;
@@ -42,7 +42,9 @@ public class AnimationThread<SV extends SurfaceView & SurfaceHolder.Callback> ex
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
             }
+            //System.out.println("Animation: " + gameClock.peekElapsed());
             int waitTime = TICK_TIME - gameClock.getElapsed();
+            //System.out.println("Animation Wait: " + waitTime);
             try {
                 sleep((waitTime > 0) ? waitTime : 0);
             } catch (InterruptedException e) {

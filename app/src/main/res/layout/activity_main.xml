@@ -1,17 +1,61 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    tools:context=".MainActivity">
 
     <com.zerokstudios.socratesman.Panel
+        android:id="@+id/mainPanel"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/mainPanel"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:background="@android:color/darker_gray" />
+
+    <Button
+        android:id="@+id/bDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="gameControlHandler"
+        android:text="DOWN" />
+
+    <Button
+        android:id="@+id/bRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bDown"
+        android:layout_toEndOf="@+id/bDown"
+        android:layout_toRightOf="@+id/bDown"
+        android:onClick="gameControlHandler"
+        android:text="RIGHT" />
+
+    <Button
+        android:id="@+id/bLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bDown"
+        android:layout_toLeftOf="@+id/bDown"
+        android:layout_toStartOf="@+id/bDown"
+        android:onClick="gameControlHandler"
+        android:text=" LEFT" />
+
+
+    <Button
+        android:id="@+id/bUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bRight"
+        android:layout_alignLeft="@+id/bDown"
+        android:layout_alignStart="@+id/bDown"
+        android:onClick="gameControlHandler"
+        android:text=" UP " />
+
     <!-- need a background to be able to display stuff apparently -->
 
 </RelativeLayout>

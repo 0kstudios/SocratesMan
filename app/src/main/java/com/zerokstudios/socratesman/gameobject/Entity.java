@@ -1,6 +1,7 @@
 package com.zerokstudios.socratesman.gameobject;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 
 import com.zerokstudios.socratesman.Map;
 import com.zerokstudios.socratesman.OI;
@@ -12,13 +13,13 @@ import com.zerokstudios.socratesman.Vector;
 public abstract class Entity implements Collidable {
     private Vector position; // measured in pixels
     private Vector velocity; // measured in tileRadius / ms
-    private boolean alive;
+    private int lives;
 
     protected Map map;
 
     protected OI oi;
 
-    private Bitmap image;
+    private Bitmap bitmap;
 
     public Entity(Map aMap, Vector aPosition, Vector aVelocity, OI aOi, Bitmap aImage) {
         if (aPosition == null) {
@@ -31,24 +32,24 @@ public abstract class Entity implements Collidable {
         map = aMap;
         position = aPosition;
         velocity = aVelocity;
-        alive = true;
-        image = aImage;
+        lives = 3;
+        bitmap = aImage;
     }
 
     public boolean isAlive() {
-        return alive;
+        return lives > 0;
     }
 
-    public void setAlive() {
-        alive = true;
+    public void revive() {
+        lives++;
     }
 
     public void kill() {
-        alive = false;
+        lives--;
     }
 
     public boolean isDead() {
-        return !alive;
+        return lives < 1;
     }
 
     public Vector getVelocity() {
@@ -64,7 +65,8 @@ public abstract class Entity implements Collidable {
     }
 
     public Vector nextPosition(int time) {
-        return position.sum(getVelocity().scale(map.getTileRadius() * time));
+        System.out.println("delta position vector: " + getVelocity().scale(map.getTileRadius() * time / 1000.0));
+        return position.sum(getVelocity().scale(map.getTileRadius() * time / 1000.0));
     }
 
     public void teleport(Vector aPosition) {
@@ -81,12 +83,12 @@ public abstract class Entity implements Collidable {
         position = nextPosition(time);
     }
 
-    public void draw() {
-
+    public void draw(Canvas canvas) {
+        canvas.drawBitmap(bitmap, position.X, position.Y, null);
     }
 
     @Override
     public boolean isColliding(Entity entity, int time) {
-        return nextPosition(time).difference(entity.nextPosition(time)).toSquareScalar() < map.getSquareTileDiameter() + 1;
+        return entity != null && nextPosition(time).difference(entity.nextPosition(time)).toSquareScalar() < map.getSquareTileDiameter() + 1;
     }
 }
