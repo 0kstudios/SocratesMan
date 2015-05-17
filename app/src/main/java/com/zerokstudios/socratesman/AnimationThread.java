@@ -31,14 +31,16 @@ public class AnimationThread<SV extends SurfaceView & SurfaceHolder.Callback> ex
         gameClock.start();
         while (run) {
             try {
-                canvas = surfaceHolder.lockCanvas();
+                canvas = surfaceHolder.lockCanvas(null);
                 synchronized (surfaceHolder) {
-                    surfaceView.draw(canvas); // originally this was onDraw(). hopefully this calls onDraw.
+                    //surfaceView.draw(canvas);
+                    surfaceView.invalidate();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 if (canvas != null) {
+                    //System.out.println("unlocked");
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
             }

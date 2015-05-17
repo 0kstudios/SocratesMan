@@ -1,6 +1,7 @@
 package com.zerokstudios.socratesman.gameobject;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 
 import com.zerokstudios.socratesman.Map;
 import com.zerokstudios.socratesman.OI;
@@ -39,6 +40,27 @@ public class Socrates extends Entity {
 
     @Override
     public void update() {
-        setVelocity(new Vector(((oi.get(OI.Control.LEFT) ? -speed.X : getVelocity().X) + (oi.get(OI.Control.RIGHT) ? speed.X : getVelocity().X)) / 2, ((oi.get(OI.Control.UP) ? -speed.Y : getVelocity().Y) + (oi.get(OI.Control.DOWN) ? speed.Y : getVelocity().Y)) / 2));
+        boolean up = oi.get(OI.Control.UP);
+        boolean down = oi.get(OI.Control.DOWN);
+        boolean left = oi.get(OI.Control.LEFT);
+        boolean right = oi.get(OI.Control.RIGHT);
+
+        int x = getVelocity().X;
+        int y = getVelocity().Y;
+
+        if (up) {
+            y = -speed.Y;
+        } else if (down) {
+            y = speed.Y;
+        }
+
+        if (left) {
+            x = -speed.X;
+        } else if (right) {
+            x = speed.X;
+        }
+
+        //System.out.println("X : " + x + " Y: " + y + " | " + up + " " + down + " " + left + " " + right);
+        setVelocity(new Vector(x, y));
     }
 }

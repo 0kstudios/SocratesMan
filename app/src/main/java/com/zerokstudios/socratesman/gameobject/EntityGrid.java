@@ -6,6 +6,7 @@ import com.zerokstudios.socratesman.Map;
 import com.zerokstudios.socratesman.Vector;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Kevin on 5/12/2015.
@@ -28,6 +29,7 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
         }
 
         TYPE = tribute.getType(); // tribute properties completely null, only used to obtain type
+        //System.out.println(Arrays.deepToString(entities));
     }
 
     public SE getEntity(Vector position) {
@@ -45,10 +47,8 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
 
     @Override
     public boolean isColliding(Entity entity, int time) {
-        Entity entityGridObject = getEntity(entity.nextPosition(time));
-        if (entityGridObject == null) {
-            return true;
-        }
+        //System.out.println(entity.getType() + " " + entity.nextPosition(time));
+        //System.out.println(getEntity(entity.nextPosition(time)));
         return entity.isColliding(getEntity(entity.nextPosition(time)), time);
     }
 

@@ -65,7 +65,8 @@ public abstract class Entity implements Collidable {
     }
 
     public Vector nextPosition(int time) {
-        System.out.println("delta position vector: " + getVelocity().scale(map.getTileRadius() * time / 1000.0));
+        //System.out.println("velocity vector: " + getVelocity());
+        //System.out.println("delta position vector: " + getVelocity().scale(map.getTileRadius() * time));
         return position.sum(getVelocity().scale(map.getTileRadius() * time / 1000.0));
     }
 
@@ -90,5 +91,10 @@ public abstract class Entity implements Collidable {
     @Override
     public boolean isColliding(Entity entity, int time) {
         return entity != null && nextPosition(time).difference(entity.nextPosition(time)).toSquareScalar() < map.getSquareTileDiameter() + 1;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(getType());
     }
 }
