@@ -13,7 +13,7 @@ import com.zerokstudios.socratesman.Vector;
 public abstract class Entity implements Collidable {
     private Vector position; // measured in pixels
     private Vector velocity; // measured in tileRadius / ms
-    private int lives;
+    private boolean alive;
 
     protected Map map;
 
@@ -32,24 +32,24 @@ public abstract class Entity implements Collidable {
         map = aMap;
         position = aPosition;
         velocity = aVelocity;
-        lives = 3;
+        alive = true;
         bitmap = aImage;
     }
 
     public boolean isAlive() {
-        return lives > 0;
+        return alive;
     }
 
     public void revive() {
-        lives++;
+        alive = true;
     }
 
     public void kill() {
-        lives--;
+        alive = false;
     }
 
     public boolean isDead() {
-        return lives < 1;
+        return !alive;
     }
 
     public Vector getVelocity() {
@@ -90,7 +90,11 @@ public abstract class Entity implements Collidable {
 
     @Override
     public boolean isColliding(Entity entity, int time) {
-        return entity != null && nextPosition(time).difference(entity.nextPosition(time)).toSquareScalar() < map.getSquareTileDiameter() + 1;
+        if (entity != null) {
+            Vector difference = nextPosition(time).difference(entity.nextPosition(time)).abs();
+            return difference.X < map.getTileDiameter()-1 || difference.Y < map.getTileDiameter()-1;
+        }
+        return false;
     }
 
     @Override

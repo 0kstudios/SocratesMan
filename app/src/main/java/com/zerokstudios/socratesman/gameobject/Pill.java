@@ -19,8 +19,9 @@ public class Pill extends StaticEntity {
     public void onCollide(CollideEvent event) {
         switch (event.TYPE) {
             case SOCRATES:
-                kill();
                 map.incrementScore(SCORE);
+                kill();
+                break;
         }
     }
 

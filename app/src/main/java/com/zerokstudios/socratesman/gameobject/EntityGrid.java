@@ -6,16 +6,13 @@ import com.zerokstudios.socratesman.Map;
 import com.zerokstudios.socratesman.Vector;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by Kevin on 5/12/2015.
  */
 public class EntityGrid<SE extends StaticEntity> implements Collidable {
-    private Map map;
-
     private final GameObjectType TYPE;
-
+    private Map map;
     private SE[][] entities;
 
     //private static final Vector[] DIRECTIONS = {new Vector(0,0), new Vector(0,1), new Vector(1,1), new Vector(1,0), new Vector(1,-1), new Vector(0,-1), new Vector(-1,-1), new Vector(-1,0), new Vector(-1,1)};
@@ -23,7 +20,7 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
     @SuppressWarnings("unchecked") //arraylist must accept type SE thus it is safe to cast to SE
     public EntityGrid(Map aMap, ArrayList<SE> aEntities, SE tribute) {
         map = aMap;
-        entities = (SE[][])(new StaticEntity[map.getGridDimensions().X][map.getGridDimensions().Y]);
+        entities = (SE[][]) (new StaticEntity[map.getGridDimensions().X][map.getGridDimensions().Y]);
         for (SE entity : aEntities) {
             entities[toGridPosition(entity.getPosition()).X][toGridPosition(entity.getPosition()).Y] = entity;
         }
@@ -36,8 +33,9 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
         return entities[toGridPosition(position).X][toGridPosition(position).Y];
     }
 
-    public void setEntity(SE entity) {
-        entities[toGridPosition(entity.getPosition()).X][toGridPosition(entity.getPosition()).Y] = entity;
+    public void setEntity(Vector position, SE entity) {
+        Vector gridPosition = toGridPosition(position);
+        entities[gridPosition.X][gridPosition.Y] = entity;
     }
 
     @Override
@@ -58,6 +56,7 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
             Entity entityGridObject = getEntity(((Entity) event.collisionMember).nextPosition(event.elapsedTime));
             if (entityGridObject != null) {
                 entityGridObject.onCollide(event);
+                garbageCollect(entityGridObject);
             }
         }
     }
@@ -94,11 +93,17 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
 
     }
 
-    public void garbageCollect(Vector position) {
+    private void garbageCollect(Vector position) {
+        garbageCollect(getEntity(position));
+    }
 
+    private void garbageCollect(Entity entity) {
+        if (entity.isDead()) {
+            setEntity(entity.getPosition(), null);
+        }
     }
 
     private Vector toGridPosition(Vector position) {
-        return new Vector(position.X/(map.getTileDiameter()), position.Y/(map.getTileDiameter()));
+        return new Vector(position.X / (map.getTileDiameter()), position.Y / (map.getTileDiameter()));
     }
 }

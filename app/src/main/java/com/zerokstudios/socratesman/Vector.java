@@ -25,6 +25,9 @@ public class Vector {
         return new Vector((int)(X * factor), (int)(Y * factor));
     }
 
+    public Vector abs() {
+        return new Vector(Math.abs(X), Math.abs(Y));
+    }
     @Override
     public boolean equals(Object o) {
         return o instanceof Vector && ((Vector) o).X == X && ((Vector) o).Y == Y;

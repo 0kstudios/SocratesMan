@@ -12,7 +12,7 @@ public class AnimationThread<SV extends SurfaceView & SurfaceHolder.Callback> ex
     private final SV surfaceView;
     private boolean run;
 
-    private static final int TICK_TIME = 1000/30;
+    private static final int TICK_TIME = 1000/15;
 
     public AnimationThread(SurfaceHolder aSurfaceHolder, SV aSurfaceView) {
         surfaceHolder = aSurfaceHolder;
