@@ -15,9 +15,6 @@ import com.zerokstudios.socratesman.gameobject.Ghost;
  */
 public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     private Bitmap background;
-    private Bitmap foreground;
-    private Canvas foregroundCanvas;
-    private Vector panelDimensions;
     private AnimationThread<Panel> animationThread;
 
     public Panel(Context context, AttributeSet attributeSet) {
@@ -45,13 +42,23 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawBitmap(background, 0, 0, null);
     }
 
+    public void pause() {
+        animationThread.setRunning(false);
+    }
+
+    public void restart() {
+        animationThread.setRunning(true);
+        animationThread.run();
+    }
+
+    public void join() throws InterruptedException {
+        animationThread.join();
+    }
+
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        panelDimensions = new Vector(getWidth(), getHeight());
+        Vector panelDimensions = new Vector(getWidth(), getHeight());
         MainActivity.GAME_CONTROLLER.setMap(new Vector(5, 5), panelDimensions, getResources());
-
-        foreground = Bitmap.createBitmap(panelDimensions.X, panelDimensions.Y, Bitmap.Config.ARGB_8888);
-        foregroundCanvas = new Canvas(foreground);
 
         background = Bitmap.createBitmap(panelDimensions.X, panelDimensions.Y, Bitmap.Config.ARGB_8888);
         Canvas backgroundCanvas = new Canvas(background);

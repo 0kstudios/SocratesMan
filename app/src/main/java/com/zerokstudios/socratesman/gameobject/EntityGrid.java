@@ -47,18 +47,25 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
     public boolean isColliding(Entity entity, int time) {
         //System.out.println(entity.getType() + " " + entity.nextPosition(time));
         //System.out.println(getEntity(entity.nextPosition(time)));
+        //return entity.isColliding(collisionGetEntity(entity.nextPosition(time), entity.getVelocity()), time); //testing code here for nicer collisions
         return entity.isColliding(getEntity(entity.nextPosition(time)), time);
     }
 
     @Override
     public void onCollide(CollideEvent event) {
         if (event.collisionMember instanceof Entity) {
+            //Entity entityGridObject = collisionGetEntity(((Entity) event.collisionMember).nextPosition(event.elapsedTime), ((Entity) event.collisionMember).getVelocity()); // testing code here for nicer collisions
             Entity entityGridObject = getEntity(((Entity) event.collisionMember).nextPosition(event.elapsedTime));
             if (entityGridObject != null) {
                 entityGridObject.onCollide(event);
                 garbageCollect(entityGridObject);
             }
         }
+    }
+
+    private Entity collisionGetEntity(Vector position, Vector velocity) {
+        Vector roundedCenterPosition = roundToGridPosition(position, velocity);
+        return entities[roundedCenterPosition.X][roundedCenterPosition.Y];
     }
 
 //    private ArrayList<SE> getSurroundings(Vector position) {
@@ -104,6 +111,24 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
     }
 
     private Vector toGridPosition(Vector position) {
-        return new Vector(position.X / (map.getTileDiameter()), position.Y / (map.getTileDiameter()));
+        return new Vector(position.X / map.getTileDiameter(), position.Y / map.getTileDiameter());
+    }
+
+    private Vector roundToGridPosition(Vector position, Vector velocity) {
+        boolean right = velocity.X > 0;
+        boolean down = velocity.Y > 0;
+        double x = position.X * 1.0 / map.getTileDiameter();
+        double y = position.Y * 1.0 / map.getTileDiameter();
+        if (right) {
+            x = Math.ceil(x);
+        } else {
+            x = Math.floor(x);
+        }
+        if (down) {
+            y = Math.ceil(y);
+        } else {
+            y = Math.floor(y);
+        }
+        return new Vector((int) x, (int) y);
     }
 }

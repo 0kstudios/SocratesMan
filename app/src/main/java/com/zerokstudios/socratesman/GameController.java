@@ -52,6 +52,11 @@ public class GameController {
         gameThread.start();
     }
 
+    public void restart() {
+        gameThread.setRunning(true);
+        gameThread.run();
+    }
+
     public void pause() {
         gameThread.setRunning(false);
     }
@@ -80,6 +85,7 @@ public class GameController {
             if (walls.isColliding(socrates, time)) {
                 socrates.onCollide(new CollideEvent(walls, time));
                 walls.onCollide(new CollideEvent(socrates, time));
+                System.out.println("wall collision");
             }
             for (Ghost ghost : ghosts) {
                 if (socrates.isColliding(ghost, time)) {

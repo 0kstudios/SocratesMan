@@ -17,12 +17,12 @@ import java.util.ArrayList;
  * Created by Kevin on 5/12/2015.
  */
 public class Map {
-    public static char[][] k = { // this is only temporary until we get a working map generator
-            {'#', '#', '#', '#', '#'},
-            {'#', '@', '.', '.', '#'},
-            {'#', '.', '.', '.', '#'},
-            {'#', '.', '.', '.', '#'},
-            {'#', '#', '#', '#', '#'}
+    public static int[][] k = { // this is only temporary until we get a working map generator
+            {0, 0, 0, 0, 0},
+            {0, 9, 1, 1, 0},
+            {0, 0, 0, 1, 0},
+            {0, 1, 1, 1, 0},
+            {0, 0, 0, 0, 0}
     };
     private int tileRadius;
     private Vector gridDimensions;
@@ -37,7 +37,7 @@ public class Map {
     public Map(Vector aGridDimensions, Vector aPixelDimensions, OI oi, Resources resources) throws SocratesNotFoundException {
         score = 0;
 
-        gridDimensions = aGridDimensions;
+        gridDimensions = new Vector(31, 29);
         setPixelDimensions(aPixelDimensions);
 
         ArrayList<Wall> wallList = new ArrayList<Wall>();
@@ -53,9 +53,9 @@ public class Map {
         images.resizeToTile(getTileRadius() * 2);
 
         int i = 0, j;
-        for (char[] chA : generateMap(aGridDimensions)) {
+        for (int[] chA : MapGenerator.generate()) {
             j = 0;
-            for (char ch : chA) {
+            for (int ch : chA) {
                 switch (ch) {
                     case Dictionary.WALL:
                         wallList.add(new Wall(this, new Vector(j, i).scale(getTileDiameter()), oi, images.getWall()));
@@ -70,6 +70,7 @@ public class Map {
                         player = new Socrates(this, new Vector(j, i).scale(getTileDiameter()), new Vector(0, 0), oi, images.getSocrates());
                         break;
                     case Dictionary.PILL:
+                    case Dictionary.GATE:
                     default:
                         pillList.add(new Pill(this, new Vector(j, i).scale(getTileDiameter()), oi, images.getPill()));
                         break;
@@ -88,12 +89,12 @@ public class Map {
         socrates = player;
     }
 
-    public static char[][] generateMap(Vector gridDimensions) {
-        return k;
-    }
-
     public int getTileRadius() {
         return tileRadius;
+    }
+
+    public Vector getTileRadiusVector() {
+        return new Vector(getTileRadius(), getTileRadius());
     }
 
     public int getTileDiameter() {
@@ -197,9 +198,10 @@ public class Map {
     }
 
     private static class Dictionary {
-        public static final char WALL = '#';
-        public static final char PILL = '.';
-        public static final char GHOST = '&';
-        public static final char SOCRATES = '@';
+        public static final int WALL = 0;
+        public static final int PILL = 1;
+        public static final int GATE = 2;
+        public static final int GHOST = 5;
+        public static final int SOCRATES = 9;
     }
 }
