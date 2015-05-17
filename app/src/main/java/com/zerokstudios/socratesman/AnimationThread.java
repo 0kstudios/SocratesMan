@@ -33,8 +33,7 @@ public class AnimationThread<SV extends SurfaceView & SurfaceHolder.Callback> ex
             try {
                 canvas = surfaceHolder.lockCanvas(null);
                 synchronized (surfaceHolder) {
-                    //surfaceView.draw(canvas);
-                    surfaceView.invalidate();
+                    surfaceView.draw(canvas);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

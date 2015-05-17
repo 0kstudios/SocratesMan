@@ -14,7 +14,9 @@ import com.zerokstudios.socratesman.gameobject.Ghost;
  * Created by Kevin on 5/12/2015.
  */
 public class Panel extends SurfaceView implements SurfaceHolder.Callback {
-    Bitmap background;
+    private Bitmap background;
+    private Bitmap foreground;
+    private Canvas foregroundCanvas;
     private Vector panelDimensions;
     private AnimationThread<Panel> animationThread;
 
@@ -27,12 +29,15 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     protected void onDraw(Canvas canvas) {
         Map map = MainActivity.GAME_CONTROLLER.getMap();
+
         clear(canvas);
         map.getPills().draw(canvas);
         map.getSocrates().draw(canvas);
         for (Ghost ghost : map.getGhosts()) {
             ghost.draw(canvas);
         }
+
+        invalidate();
     }
 
     private void clear(Canvas canvas) {
@@ -44,6 +49,9 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         panelDimensions = new Vector(getWidth(), getHeight());
         MainActivity.GAME_CONTROLLER.setMap(new Vector(5, 5), panelDimensions, getResources());
+
+        foreground = Bitmap.createBitmap(panelDimensions.X, panelDimensions.Y, Bitmap.Config.ARGB_8888);
+        foregroundCanvas = new Canvas(foreground);
 
         background = Bitmap.createBitmap(panelDimensions.X, panelDimensions.Y, Bitmap.Config.ARGB_8888);
         Canvas backgroundCanvas = new Canvas(background);
