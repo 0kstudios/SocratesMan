@@ -92,7 +92,7 @@ public abstract class Entity implements Collidable {
     public boolean isColliding(Entity entity, int time) {
         if (entity != null) {
             Vector difference = nextPosition(time).difference(entity.nextPosition(time)).abs();
-            int collisionRadius = map.getTileDiameter()-4;
+            int collisionRadius = map.getTileDiameter()-1;
             return difference.X < collisionRadius && difference.Y < collisionRadius;
         }
         return false;
