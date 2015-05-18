@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Created by Kevin on 5/12/2015.
  */
 public class EntityGrid<SE extends StaticEntity> implements Collidable {
-    private static final Vector[] DIRECTIONS = {new Vector(0, 0), new Vector(0, 1), new Vector(1, 1), new Vector(1, 0), new Vector(1, -1), new Vector(0, -1), new Vector(-1, -1), new Vector(-1, 0), new Vector(-1, 1)};
+    private static final Vector[] DIRECTIONS = {new Vector(0, 1), new Vector(1, 0), new Vector(0, -1), new Vector(-1, 0)};
     private final GameObjectType TYPE;
     private Map map;
     private SE[][] entities;
@@ -114,5 +114,17 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
             y = Math.floor(y);
         }
         return new Vector((int) x, (int) y);
+    }
+
+    public ArrayList<SE> getSurroundings(SE entity) {
+        ArrayList<SE> surroundings = new ArrayList<>();
+        Vector currentPosition = entity.getPosition();
+        for (Vector direction : DIRECTIONS) {
+            SE target = getEntity(currentPosition.sum(direction.scale(map.getTileDiameter())));
+            if (target != null) {
+                surroundings.add(target);
+            }
+        }
+        return surroundings;
     }
 }

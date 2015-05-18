@@ -17,12 +17,18 @@ import java.util.ArrayList;
  * Created by Kevin on 5/12/2015.
  */
 public class Map {
-    public static int[][] k = { // this is only temporary until we get a working map generator
-            {0, 0, 0, 0, 0},
-            {0, 9, 1, 1, 0},
-            {0, 0, 0, 1, 0},
-            {0, 1, 1, 1, 0},
-            {0, 0, 0, 0, 0}
+    public static int[][] k = { // this is only temporary until we can optimize draw for larger maps
+            {1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1},
+            {1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+            {1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1},
+            {1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1},
+            {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+            {1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1},
+            {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+            {1, 0, 1, 1, 0, 3, 0, 1, 1, 0, 1},
+            {1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1},
+            {1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
     };
     private int tileRadius;
     private Vector gridDimensions;
@@ -39,7 +45,7 @@ public class Map {
         score = 0;
         maxScore = 0;
 
-        gridDimensions = new Vector(31, 29);
+        gridDimensions = new Vector(11, 11);
         setPixelDimensions(aPixelDimensions);
 
         ArrayList<Wall> wallList = new ArrayList<Wall>();
@@ -55,7 +61,7 @@ public class Map {
         images.resizeToTile(getTileRadius() * 2);
 
         int i = 0, j;
-        for (int[] chA : MapGenerator.generate()) {
+        for (int[] chA : k){//MapGenerator.generate()) {
             j = 0;
             for (int ch : chA) {
                 switch (ch) {
@@ -201,10 +207,10 @@ public class Map {
     }
 
     private static class Dictionary {
-        public static final int WALL = 0;
-        public static final int PILL = 1;
-        public static final int GATE = 2;
-        public static final int GHOST = 5;
-        public static final int SOCRATES = 9;
+        public static final int WALL = 1;
+        public static final int PILL = 0;
+        public static final int GATE = 4;
+        public static final int GHOST = 2;
+        public static final int SOCRATES = 3;
     }
 }
