@@ -67,6 +67,7 @@ public class GameController {
 
     public void tick(int time) {
         Socrates socrates = map.getSocrates();
+        System.out.println(socrates.getPosition());
         if (socrates.isDead()) {
             endGame();
         } else if (oi.get(OI.Control.PAUSE)) {
@@ -105,15 +106,16 @@ public class GameController {
             for (Ghost ghost : ghosts) {
                 ghost.tick(time);
             }
-            System.out.println(socrates.getPosition());
         }
     }
 
     public void endGame() {
+        System.out.println("End Game");
         pause();
     }
 
     public void winGame() {
+        System.out.println("Win Game");
         pause();
     }
 }

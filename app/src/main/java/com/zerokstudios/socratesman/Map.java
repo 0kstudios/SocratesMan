@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 public class Map {
     public static int[][] k = { // this is only temporary until we can optimize draw for larger maps
-            {1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
             {1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1},
             {1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1},
             {1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1},
@@ -81,6 +81,7 @@ public class Map {
                     case Dictionary.GATE:
                     default:
                         pillList.add(new Pill(this, new Vector(j, i).scale(getTileDiameter()), oi, images.getPill()));
+                        //cellList.add(new Cell(this, new Vector(j, i).scale(getTileDiameter()), oi, null));
                         maxScore++;
                         break;
                 }
