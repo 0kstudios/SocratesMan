@@ -35,12 +35,10 @@ public class AnimationThread extends Thread {
                 synchronized (surfaceHolder) {
                     surfaceView.redraw(canvas);
                 }
-//                surfaceView.invalidate();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 if (canvas != null) {
-                    //System.out.println("unlocked");
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
             }

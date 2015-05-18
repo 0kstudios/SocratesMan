@@ -33,9 +33,11 @@ public class Map {
     private ArrayList<Ghost> ghosts;
     private Socrates socrates;
     private int score;
+    private int maxScore;
 
     public Map(Vector aGridDimensions, Vector aPixelDimensions, OI oi, Resources resources) throws SocratesNotFoundException {
         score = 0;
+        maxScore = 0;
 
         gridDimensions = new Vector(31, 29);
         setPixelDimensions(aPixelDimensions);
@@ -73,6 +75,7 @@ public class Map {
                     case Dictionary.GATE:
                     default:
                         pillList.add(new Pill(this, new Vector(j, i).scale(getTileDiameter()), oi, images.getPill()));
+                        maxScore++;
                         break;
                 }
                 j++;

@@ -4,7 +4,7 @@ package com.zerokstudios.socratesman;
  * Created by Kevin on 5/15/2015.
  */
 public class GameThread extends Thread {
-    private static final int TICK_TIME = 1000 / 15;
+    private static final int TICK_TIME = 1000 / 30;
     private final GameController gameController;
     private boolean run;
 

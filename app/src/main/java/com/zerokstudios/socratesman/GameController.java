@@ -35,12 +35,12 @@ public class GameController {
         return false;
     }
 
-    public void setOi(OI aOi) {
-        oi = aOi;
-    }
-
     public OI getOi() {
         return oi;
+    }
+
+    public void setOi(OI aOi) {
+        oi = aOi;
     }
 
     public Map getMap() {
@@ -85,7 +85,6 @@ public class GameController {
             if (walls.isColliding(socrates, time)) {
                 socrates.onCollide(new CollideEvent(walls, time));
                 walls.onCollide(new CollideEvent(socrates, time));
-                System.out.println("wall collision");
             }
             for (Ghost ghost : ghosts) {
                 if (socrates.isColliding(ghost, time)) {
@@ -106,10 +105,15 @@ public class GameController {
             for (Ghost ghost : ghosts) {
                 ghost.tick(time);
             }
+            System.out.println(socrates.getPosition());
         }
     }
 
     public void endGame() {
+        pause();
+    }
 
+    public void winGame() {
+        pause();
     }
 }
