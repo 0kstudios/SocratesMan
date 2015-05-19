@@ -6,9 +6,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-
+/**
+ * main activity for the game
+ */
 public class MainActivity extends ActionBarActivity {
-    public static final GameController GAME_CONTROLLER = new GameController();
+    public static final GameController GAME_CONTROLLER = new GameController(); //have a single game instance
     private Panel panel;
 
     @Override
@@ -72,6 +74,10 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * input handling
+     * @param view view of event
+     */
     public void gameControlHandler(View view) {
         OI oi = GAME_CONTROLLER.getOi();
         switch (view.getId()) {

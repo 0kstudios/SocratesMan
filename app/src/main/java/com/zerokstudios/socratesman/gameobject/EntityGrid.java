@@ -116,15 +116,24 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
         return new Vector((int) x, (int) y);
     }
 
-    public ArrayList<SE> getSurroundings(SE entity) {
+    public ArrayList<SE> getSurroundings(Vector position) {
         ArrayList<SE> surroundings = new ArrayList<>();
-        Vector currentPosition = entity.getPosition();
         for (Vector direction : DIRECTIONS) {
-            SE target = getEntity(currentPosition.sum(direction.scale(map.getTileDiameter())));
+            SE target = getEntity(position.sum(direction.scale(map.getTileDiameter())));
             if (target != null) {
                 surroundings.add(target);
             }
         }
         return surroundings;
+    }
+
+    public void tick(int time) {
+        for (Entity[] e : entities) {
+            for (Entity ent : e) {
+                if (ent != null) {
+                    ent.tick(time);
+                }
+            }
+        }
     }
 }

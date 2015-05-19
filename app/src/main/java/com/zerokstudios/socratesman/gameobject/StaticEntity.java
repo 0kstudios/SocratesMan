@@ -26,8 +26,4 @@ public abstract class StaticEntity extends Entity {
         //statics do not move
     }
 
-    @Override
-    public void goTo(Vector position) {
-        //statics do not move
-    }
 }

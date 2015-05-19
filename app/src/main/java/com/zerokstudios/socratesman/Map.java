@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.zerokstudios.socratesman.gameobject.Cell;
 import com.zerokstudios.socratesman.gameobject.EntityGrid;
 import com.zerokstudios.socratesman.gameobject.Ghost;
 import com.zerokstudios.socratesman.gameobject.Pill;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 
 /**
  * Created by Kevin on 5/12/2015.
+ *
+ * game state
  */
 public class Map {
     public static int[][] k = { // this is only temporary until we can optimize draw for larger maps
@@ -38,21 +41,34 @@ public class Map {
     private EntityGrid<Pill> pills;
     private ArrayList<Ghost> ghosts;
     private Socrates socrates;
+    private EntityGrid<Cell> cells;
     private int score;
     private int maxScore;
 
+    /**
+     * constructor
+     * @param aGridDimensions grid dimensions
+     * @param aPixelDimensions pixel dimensions of surface
+     * @param oi pass in oi
+     * @param resources pass in resources
+     * @throws SocratesNotFoundException
+     */
     public Map(Vector aGridDimensions, Vector aPixelDimensions, OI oi, Resources resources) throws SocratesNotFoundException {
         score = 0;
         maxScore = 0;
 
+        //calculate tile diameter
         gridDimensions = new Vector(11, 11);
         setPixelDimensions(aPixelDimensions);
 
-        ArrayList<Wall> wallList = new ArrayList<Wall>();
-        ArrayList<Pill> pillList = new ArrayList<Pill>();
-        ArrayList<Ghost> ghostList = new ArrayList<Ghost>();
+        //temporary arrays to keep track of game objects
+        ArrayList<Wall> wallList = new ArrayList<>();
+        ArrayList<Pill> pillList = new ArrayList<>();
+        ArrayList<Ghost> ghostList = new ArrayList<>();
         Socrates player = null;
+        ArrayList<Cell> cellList = new ArrayList<>();
 
+        //instantiate drawable resources
         images = new Images();
         images.setSocrates(BitmapFactory.decodeResource(resources, R.drawable.socrates));
         images.setGhost(BitmapFactory.decodeResource(resources, R.drawable.ghost));
@@ -60,8 +76,9 @@ public class Map {
         images.setPill(BitmapFactory.decodeResource(resources, R.drawable.pill));
         images.resizeToTile(getTileRadius() * 2);
 
+        //parse map
         int i = 0, j;
-        for (int[] chA : k){//MapGenerator.generate()) {
+        for (int[] chA : k) {//MapGenerator.generate()) {
             j = 0;
             for (int ch : chA) {
                 switch (ch) {
@@ -81,7 +98,7 @@ public class Map {
                     case Dictionary.GATE:
                     default:
                         pillList.add(new Pill(this, new Vector(j, i).scale(getTileDiameter()), oi, images.getPill()));
-                        //cellList.add(new Cell(this, new Vector(j, i).scale(getTileDiameter()), oi, null));
+                        cellList.add(new Cell(this, new Vector(j, i).scale(getTileDiameter()), oi, null));
                         maxScore++;
                         break;
                 }
@@ -90,6 +107,7 @@ public class Map {
             i++;
         }
 
+        //instantiate game components
         if (player == null) {
             throw new SocratesNotFoundException("Socrates does not exist");
         }
@@ -97,12 +115,17 @@ public class Map {
         pills = new EntityGrid<Pill>(this, pillList, new Pill(null, null, null, null));
         ghosts = ghostList;
         socrates = player;
+        cells = new EntityGrid<Cell>(this, cellList, new Cell(null, null, null, null));
     }
 
     public int getTileRadius() {
         return tileRadius;
     }
 
+    /**
+     * tile radius in the form of a vector
+     * @return radius vector
+     */
     public Vector getTileRadiusVector() {
         return new Vector(getTileRadius(), getTileRadius());
     }
@@ -111,6 +134,10 @@ public class Map {
         return tileRadius * 2;
     }
 
+    /**
+     * get square of tile diameter as magnitude
+     * @return tile diameter magnitude
+     */
     public int getSquareTileDiameter() {
         return tileRadius * tileRadius * 4;
     }
@@ -123,6 +150,10 @@ public class Map {
         return pixelDimensions;
     }
 
+    /**
+     * set tile width for square playing surface
+     * @param aPixelDimensions pixel dimensions
+     */
     private void setPixelDimensions(Vector aPixelDimensions) {
         int width = aPixelDimensions.X / gridDimensions.X;
         int height = aPixelDimensions.Y / gridDimensions.Y;
@@ -138,6 +169,14 @@ public class Map {
 
     public int getScore() {
         return score;
+    }
+
+    public int getMaxScore() {
+        return maxScore;
+    }
+
+    public boolean isScoreWin() {
+        return score >= maxScore;
     }
 
     public void incrementScore(int s) {
@@ -160,6 +199,13 @@ public class Map {
         return socrates;
     }
 
+    public EntityGrid<Cell> getCells() {
+        return cells;
+    }
+
+    /**
+     * image resource manager
+     */
     private static class Images {
         private Bitmap socrates, ghost, wall, pill;
 
@@ -195,6 +241,10 @@ public class Map {
             pill = aPill;
         }
 
+        /**
+         * resize bitmaps to tile size
+         * @param size tile width
+         */
         public void resizeToTile(int size) {
             socrates = resizeBitmapToTile(socrates, size);
             ghost = resizeBitmapToTile(ghost, size);
@@ -207,6 +257,9 @@ public class Map {
         }
     }
 
+    /**
+     * dictionary for parsing map
+     */
     private static class Dictionary {
         public static final int WALL = 1;
         public static final int PILL = 0;

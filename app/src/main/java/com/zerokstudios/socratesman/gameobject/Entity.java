@@ -74,10 +74,6 @@ public abstract class Entity implements Collidable {
         position = aPosition;
     }
 
-    public void goTo(Vector aPosition) {
-        //pathfinding here
-    }
-
     public abstract void update();
 
     public void tick(int time) {

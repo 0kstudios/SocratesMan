@@ -3,9 +3,16 @@ package com.zerokstudios.socratesman;
 import java.util.Random;
 
 /**
- * Created by Kevin on 5/16/2015.
+ * Created by Sherman on 5/16/2015.
+ *
+ * map generator
  */
 public class MapGenerator {
+
+    /**
+     * generates a map
+     * @return map
+     */
     public static int[][] generate() {
         Tetris ye = new Tetris();
         ye.generate();
@@ -249,6 +256,9 @@ public class MapGenerator {
             return board;
         }
 
+        /**
+         * shapes for generation
+         */
         private static class Shape {
             public static final int[][] T =
                     {{0, 0, 0, 1, 1, 1, 0, 0, 0},
