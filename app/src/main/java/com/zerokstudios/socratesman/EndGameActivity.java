@@ -1,9 +1,11 @@
 package com.zerokstudios.socratesman;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 /**
@@ -55,5 +57,14 @@ public class EndGameActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void inputHandler(View view) {
+        switch (view.getId()) {
+            case R.id.bRestart:
+                Intent intent = new Intent(this, StartActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 }
