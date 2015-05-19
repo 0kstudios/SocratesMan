@@ -1,18 +1,28 @@
 package com.zerokstudios.socratesman.gameobject;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
 import com.zerokstudios.socratesman.Map;
 import com.zerokstudios.socratesman.OI;
 import com.zerokstudios.socratesman.Vector;
-import com.zerokstudios.socratesman.gameobject.CollideEvent;
-import com.zerokstudios.socratesman.gameobject.Entity;
 
 /**
  * Created by Kevin on 5/12/2015.
+ * <p/>
+ * socrates class
  */
 public class Socrates extends Entity {
+    private static final int speed = 5;
+
+    /**
+     * default constructor
+     *
+     * @param aMap
+     * @param aPosition
+     * @param aVelocity
+     * @param aOi
+     * @param aImage
+     */
     public Socrates(Map aMap, Vector aPosition, Vector aVelocity, OI aOi, Bitmap aImage) {
         super(aMap, aPosition, aVelocity, aOi, aImage);
     }
@@ -22,6 +32,18 @@ public class Socrates extends Entity {
         return GameObjectType.SOCRATES;
     }
 
+//    @Override
+//    public void draw(Canvas canvas) {
+//        Vector drawLocation = getPosition().sum(map.getTileRadiusVector().scale(-1));
+//        canvas.drawBitmap(bitmap, drawLocation.X, drawLocation.Y, null);
+//    }
+
+    /**
+     * on collide with wall, set velocity 0
+     * on collide with ghost, kill
+     *
+     * @param event
+     */
     @Override
     public void onCollide(CollideEvent event) {
         switch (event.TYPE) {
@@ -36,14 +58,9 @@ public class Socrates extends Entity {
         }
     }
 
-//    @Override
-//    public void draw(Canvas canvas) {
-//        Vector drawLocation = getPosition().sum(map.getTileRadiusVector().scale(-1));
-//        canvas.drawBitmap(bitmap, drawLocation.X, drawLocation.Y, null);
-//    }
-
-    private final Vector speed = new Vector(3,3);
-
+    /**
+     * set velocity based on current oi
+     */
     @Override
     public void update() {
         boolean up = oi.get(OI.Control.UP);
@@ -55,15 +72,15 @@ public class Socrates extends Entity {
         int y = getVelocity().Y;
 
         if (up) {
-            y = -speed.Y;
+            y = -speed;
         } else if (down) {
-            y = speed.Y;
+            y = speed;
         }
 
         if (left) {
-            x = -speed.X;
+            x = -speed;
         } else if (right) {
-            x = speed.X;
+            x = speed;
         }
 
         //System.out.println("X : " + x + " Y: " + y + " | " + up + " " + down + " " + left + " " + right);

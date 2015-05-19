@@ -2,6 +2,8 @@ package com.zerokstudios.socratesman.gameobject;
 
 /**
  * Created by Kevin on 5/12/2015.
+ * <p/>
+ * exception thrown if error with map and the existence of socrates
  */
 public class SocratesNotFoundException extends Exception {
     public SocratesNotFoundException() {

@@ -8,8 +8,17 @@ import com.zerokstudios.socratesman.Vector;
 
 /**
  * Created by Kevin on 5/12/2015.
+ * <p/>
+ * wall class, literally does nothing
  */
 public class Wall extends StaticEntity {
+    /**
+     * default constructor
+     * @param aMap
+     * @param aPosition
+     * @param aOi
+     * @param aImage
+     */
     public Wall(Map aMap, Vector aPosition, OI aOi, Bitmap aImage) {
         super(aMap, aPosition, aOi, aImage);
     }

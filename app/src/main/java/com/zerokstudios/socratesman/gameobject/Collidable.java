@@ -2,9 +2,11 @@ package com.zerokstudios.socratesman.gameobject;
 
 /**
  * Created by Kevin on 5/12/2015.
+ *
+ * collidable object specification
  */
 public interface Collidable {
-    public boolean isColliding(Entity entity, int time);
-    public void onCollide(CollideEvent event);
-    public GameObjectType getType();
+    boolean isColliding(Entity entity, int time);
+    void onCollide(CollideEvent event);
+    GameObjectType getType();
 }

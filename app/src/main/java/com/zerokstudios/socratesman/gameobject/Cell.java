@@ -12,33 +12,45 @@ import com.zerokstudios.socratesman.Vector;
  */
 public class Cell extends StaticEntity {
 
-    private final int MAXHEATVALUE = 3000;
+    private final int MAXHEATVALUE = 32768;
 
     private int heat;
 
-    public Cell(Map aMap, Vector aPosition, OI aOi, Bitmap aImage)
-    {
+    /**
+     * default constructor
+     *
+     * @param aMap
+     * @param aPosition
+     * @param aOi
+     * @param aImage
+     */
+    public Cell(Map aMap, Vector aPosition, OI aOi, Bitmap aImage) {
         super(aMap, aPosition, aOi, aImage);
         heat = MAXHEATVALUE;
     }
 
-    public int getHeat()
-    {
+    public int getHeat() {
         return heat;
     }
 
-    public void setHeat(int newHeat)
-    {
+    public void setHeat(int newHeat) {
         heat = newHeat;
     }
 
-    public void decrementHeat()
-    {
-        if(heat > 0)
-        {
+    /**
+     * decrease the heat towards 0
+     */
+    public void decrementHeat() {
+        if (heat > 0) {
             heat--;
         }
     }
+
+    /**
+     * set heat value to max if hit by socrates
+     *
+     * @param event
+     */
     @Override
     public void onCollide(CollideEvent event) {
         switch (event.TYPE) {
@@ -54,14 +66,17 @@ public class Cell extends StaticEntity {
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
 
     }
 
+    /**
+     * decrement heat
+     *
+     * @param time
+     */
     @Override
-    public void tick(int time)
-    {
+    public void tick(int time) {
         super.tick(time);
         decrementHeat();
     }

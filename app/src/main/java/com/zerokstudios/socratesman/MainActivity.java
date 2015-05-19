@@ -24,7 +24,7 @@ public class MainActivity extends ActionBarActivity {
 //        DisplayMetrics metrics = new DisplayMetrics();
 //        getWindowManager().getDefaultDisplay().getMetrics(metrics);
 //        Vector screenDimensions = new Vector(metrics.widthPixels, metrics.heightPixels);
-
+        GAME_CONTROLLER.setActivity(this);
         panel = (Panel) findViewById(R.id.mainPanel);
     }
 

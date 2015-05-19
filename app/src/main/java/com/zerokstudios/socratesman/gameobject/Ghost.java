@@ -7,21 +7,42 @@ import com.zerokstudios.socratesman.OI;
 import com.zerokstudios.socratesman.Vector;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by Deven on 5/12/2015.
+ * <p/>
+ * ghost class
  */
 public class Ghost extends Entity {
+    private static int speed = 4;
     private Vector target;
+    private Random random;
 
+    /**
+     * default constructor
+     *
+     * @param aMap
+     * @param aPosition
+     * @param aVelocity
+     * @param aOi
+     * @param aImage
+     */
     public Ghost(Map aMap, Vector aPosition, Vector aVelocity, OI aOi, Bitmap aImage) {
         super(aMap, aPosition, aVelocity, aOi, aImage);
 
         target = null;
+        random = new Random();
     }
 
+    /**
+     * checks to see if surrounding heat values are equal
+     *
+     * @param cellList
+     * @return is equal
+     */
     public static boolean allSurroundingHeatsTheSame(ArrayList<Cell> cellList) {
-        if (cellList.size() == 1) {
+        if (cellList.size() < 2) {
             return true;
         } else {
             int firstHeat = cellList.get(0).getHeat();
@@ -31,10 +52,15 @@ public class Ghost extends Entity {
                 cellList.remove(0);
                 allSurroundingHeatsTheSame(cellList);
             }
-            return true;
+            return false;
         }
     }
 
+    /**
+     * if wall, set velocity 0
+     *
+     * @param event
+     */
     @Override
     public void onCollide(CollideEvent event) {
         switch (event.TYPE) {
@@ -52,36 +78,49 @@ public class Ghost extends Entity {
         return GameObjectType.GHOST;
     }
 
+    /**
+     * determine which square to move to and set velocity accordingly
+     */
     @Override
     public void update() {
+        //System.out.println("Ghost position: " + getPosition());
         if (target == null) {
             int maxHeat = Integer.MIN_VALUE;
             ArrayList<Cell> surroundings = map.getCells().getSurroundings(getPosition());
-            if (!allSurroundingHeatsTheSame(surroundings)) {
-                for (Cell c : surroundings) {
-                    if (c.getHeat() > maxHeat) {
-                        maxHeat = c.getHeat();
-                        target = c.getPosition();
-                    }
-                }
-            } else {
-                double minDistance = Integer.MAX_VALUE;
-                for (Cell c : surroundings) {
-                    double dist = Math.sqrt(Math.pow(map.getSocrates().getPosition().Y - c.getPosition().Y, 2) + Math.pow(map.getSocrates().getPosition().X - c.getPosition().X, 2));
-                    if (dist < minDistance) {
-                        minDistance = dist;
-                        target = c.getPosition();
-                    }
+            for (Cell c : surroundings) {
+                if (c.getHeat() > maxHeat) {
+                    maxHeat = c.getHeat();
+                    target = c.getPosition();
                 }
             }
+        } else if (getPosition().difference(target).toSquareScalar() < map.getSquareTileDiameter()) {
+            target = null;
         }
-
         goTo(target);
     }
 
+    /**
+     * set velocity based on current target position
+     *
+     * @param targetPosition
+     */
     public void goTo(Vector targetPosition) {
-        Vector delta = targetPosition.difference(getPosition());
-
-        setVelocity(new Vector(((delta.X > 0) ? 1 : -1), (delta.Y > 0) ? 1 : -1));
+        if (targetPosition != null) {
+            Vector delta = targetPosition.difference(getPosition());
+            int x = getVelocity().X;
+            int y = getVelocity().Y;
+            if (delta.X > map.getTileRadius()) {
+                x = speed;
+            } else if (delta.X < -map.getTileRadius()) {
+                x = -speed;
+            }
+            if (delta.Y > map.getTileRadius()) {
+                y = speed;
+            } else if (delta.Y < -map.getTileRadius()) {
+                y = -speed;
+            }
+            setVelocity(new Vector(x, y));
+            //System.out.println(getPosition() + " " + getVelocity() + " " + delta);
+        }
     }
 }

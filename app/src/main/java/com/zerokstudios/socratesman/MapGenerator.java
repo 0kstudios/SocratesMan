@@ -4,110 +4,74 @@ import java.util.Random;
 
 /**
  * Created by Sherman on 5/16/2015.
- *
+ * <p/>
  * map generator
  */
 public class MapGenerator {
 
-    /**
-     * generates a map
-     * @return map
-     */
     public static int[][] generate() {
         Tetris ye = new Tetris();
         ye.generate();
 
 
-        int[][] map = new int[27][29];
+        //copies onto new map
+        int[][] map = new int[16][17];
         for (int i = 13; i >= 0; i--) {
-            for (int x = 0; x < 15; x++) {
-                map[i + 13][x] = ye.board[i][x];
+            for (int x = 0; x <= 14; x++) {
+                map[i + 1][x + 1] = ye.board[i][x];
             }
         }
 
-        for (int q = 13; q < 27; q++) {
-            for (int w = 13; w >= 0; w--) {
-                map[q][28 - w] = map[q][w];
+
+        for (int i = 1; i < map.length - 1; i++) //puts 1 on border of box
+            map[i][1] = 1;
+
+        for (int i = 1; i < map.length - 1; i++)
+            map[i][15] = 1;
+        for (int i = 1; i < map[0].length - 1; i++)
+            map[1][i] = 1;
+
+
+        //removes all 2's and replaces with 0's
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                if (map[i][j] == 2)
+                    map[i][j] = 0;
             }
         }
 
-        for (int z = 26; z >= 0; z--) {
-            for (int c = 0; c < 29; c++) {
-                map[26 - z][c] = map[z][c];
-            }
-        }
-
-        for (int i = 0; i < map.length; i++)
-            map[i][0] = 1;
-        for (int m = 0; m < map.length; m++)
-            map[m][map[0].length - 1] = 1;
-
-
-        int[][] map2 = new int[29][31];
-        int t = 1;
-        int y = 27;
-        for (int i = 0; i < 27; i++) {
-            for (int j = 0; j < 29; j++) {
-                map2[y][t] = map[26 - i][j];
-                t++;
-            }
-            t = 1;
-            y--;
-        }
-
-        for (int i = 0; i < map2.length; i++) {
-            for (int j = 0; j < map2[0].length; j++) {
-                if (map2[i][j] == 2)
-                    map2[i][j] = 0;
-            }
-        }
-
-        map2[15][15] = 2;
-        map2[15][16] = 0;
-        map2[15][17] = 0;
-        map2[14][17] = 2;
-        map2[13][17] = 0;
-        map2[13][16] = 0;
-        map2[13][15] = 2;
-        map2[13][14] = 0;
-        map2[13][13] = 0;
-        map2[14][13] = 2;
-        map2[14][14] = 5;
-        map2[14][15] = 2;
-        map2[14][16] = 5;
-        map2[15][13] = 0;
-        map2[15][14] = 0;
-        map2[1][1] = 9;
-
-        if (map2[16][15] != 1 && map2[14][18] != 1 && map2[12][15] != 1 && map2[14][12] != 1) {
-            int x = 15;
-            while (map2[14][x + 2] != 1) {
-                map2[14][x + 2] = 2;
-                map2[14][30 - x - 2] = 2;
-                x++;
-            }
-        }
-
-        return map2;
+        //sets some specified spots for important characters
+        map[1][1] = 9; //pac man spot
+        map[14][1] = 5; //ghost1
+        map[14][15] = 5; //ghost2
+        return map;
     }
 
-    public static class Tetris {
-        public int[][] board =
-                {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
+    /**
+     * This class handles generating pac man maps
+     *
+     * @author Sherman Luo Period 4
+     */
+    public static class Tetris {
+        public int[][] board = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}; // main board
+
+        /**
+         * Constructor has nothing
+         */
         public Tetris() {
         }
 
@@ -123,8 +87,11 @@ public class MapGenerator {
             return count / max;
         }
 
-        //true if 1 or 2 has been found
-        //false otherwise
+        /**
+         * Check if 1 or 2 occupies top row
+         *
+         * @return true if found, false if not
+         */
         private boolean checkTop() {
             for (int x : board[0]) {
                 if (x != 0)
@@ -133,11 +100,19 @@ public class MapGenerator {
             return false;
         }
 
-        //true if 1 was found
+        /**
+         * Method returns true or false based on whether a block can keep falling or
+         * it hits another block, or the floor
+         *
+         * @param position - x position
+         * @param length   - length of block
+         * @param height   - y position
+         * @param z        - block type
+         * @return - true if another block has not been touched
+         */
         private boolean checkOne(int position, int length, int height, int z) {
             int i = height;
             int x = position;
-
 
             if (z == 1 || z == 2 || z == 3) {
                 for (int j = 0; j < length; j++) {
@@ -149,7 +124,6 @@ public class MapGenerator {
                 }
 
             }
-
 
             if (z == 4) {
                 for (int j = 0; j < 4; j++) {
@@ -176,7 +150,6 @@ public class MapGenerator {
                     }
                     x++;
 
-
                 }
             }
 
@@ -201,7 +174,13 @@ public class MapGenerator {
             return false;
         }
 
-        //copies the dropped block starting from left corner
+        /**
+         * copies the dropped block starting from left corner onto board
+         *
+         * @param row  - starting row
+         * @param col  - starting col
+         * @param swag - array to be copied onto board
+         */
         public void copy(int row, int col, int[][] swag) {
             int x = col;
             for (int i = 0; i < swag.length; i++) {
@@ -218,13 +197,26 @@ public class MapGenerator {
 
         }
 
-        //makes sure stuff is in bounds
+        /**
+         * makes sure stuff is in bounds
+         *
+         * @param row - row to be checked
+         * @param col - col to be checked
+         * @return - true whether in bounds or not
+         */
         private boolean checkBounds(int row, int col) {
             if (row >= 0 && row < board.length && col >= 0 && col < board[0].length) {
                 return true;
-            } else return false;
+            } else
+                return false;
         }
 
+        /**
+         * The generate process that alters the board variable to create a random
+         * map
+         *
+         * @return - generated 2D Array
+         */
         public int[][] generate() {
             int count = 0;
             while (countPercent() > .4) {
@@ -251,56 +243,35 @@ public class MapGenerator {
                 copy(i, y, ye);
                 count++;
 
-
             }
             return board;
         }
 
         /**
-         * shapes for generation
+         * This class has several static shapes to be used in tetris
+         *
+         * @author Sherman Luo
          */
         private static class Shape {
-            public static final int[][] T =
-                    {{0, 0, 0, 1, 1, 1, 0, 0, 0},
-                            {0, 0, 0, 1, 2, 1, 0, 0, 0},
-                            {0, 0, 0, 1, 2, 1, 0, 0, 0},
-                            {0, 0, 0, 1, 2, 1, 0, 0, 0},
-                            {1, 1, 1, 1, 2, 1, 1, 1, 1},
-                            {1, 2, 2, 2, 2, 2, 2, 2, 1},
-                            {1, 1, 1, 1, 1, 1, 1, 1, 1}};
-            public static final int[][] L =
-                    {{0, 0, 1, 1, 1},
-                            {0, 0, 1, 2, 1},
-                            {0, 0, 1, 2, 1},
-                            {1, 1, 1, 2, 1},
-                            {1, 2, 2, 2, 1},
-                            {1, 1, 1, 1, 1}};
-            public static final int[][] BOX =
-                    {{1, 1, 1, 1, 1},
-                            {1, 2, 2, 2, 1},
-                            {1, 2, 2, 2, 1},
-                            {1, 2, 2, 2, 1},
-                            {1, 1, 1, 1, 1}};
-            public static final int[][] UNDERT =
-                    {{1, 1, 1, 1, 2, 1, 1, 1, 1},
-                            {1, 2, 2, 2, 2, 2, 2, 2, 1},
-                            {1, 1, 1, 1, 1, 1, 1, 1, 1},
-                            {0, 0, 0, 1, 1, 1, 0, 0, 0},
-                            {0, 0, 0, 1, 2, 1, 0, 0, 0},
-                            {0, 0, 0, 1, 2, 1, 0, 0, 0},
-                            {0, 0, 0, 1, 1, 1, 0, 0, 0}
-                    };
-            public static final int[][] UPL =
-                    {{1, 1, 1, 2, 1},
-                            {1, 2, 2, 2, 1},
-                            {1, 1, 1, 1, 1},
-                            {0, 0, 1, 2, 1},
-                            {0, 0, 1, 2, 1},
-                            {0, 0, 1, 1, 1}
-                    };
+            public static final int[][] T = {{0, 0, 0, 1, 1, 1, 0, 0, 0},
+                    {0, 0, 0, 1, 2, 1, 0, 0, 0}, {0, 0, 0, 1, 2, 1, 0, 0, 0},
+                    {0, 0, 0, 1, 2, 1, 0, 0, 0}, {1, 1, 1, 1, 2, 1, 1, 1, 1},
+                    {1, 2, 2, 2, 2, 2, 2, 2, 1}, {1, 1, 1, 1, 1, 1, 1, 1, 1}};
+            public static final int[][] L = {{0, 0, 1, 1, 1}, {0, 0, 1, 2, 1},
+                    {0, 0, 1, 2, 1}, {1, 1, 1, 2, 1}, {1, 2, 2, 2, 1},
+                    {1, 1, 1, 1, 1}};
+            public static final int[][] BOX = {{1, 1, 1, 1, 1},
+                    {1, 2, 2, 2, 1}, {1, 2, 2, 2, 1}, {1, 2, 2, 2, 1},
+                    {1, 1, 1, 1, 1}};
+            public static final int[][] UNDERT = {{1, 1, 1, 1, 2, 1, 1, 1, 1},
+                    {1, 2, 2, 2, 2, 2, 2, 2, 1}, {1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    {0, 0, 0, 1, 1, 1, 0, 0, 0}, {0, 0, 0, 1, 2, 1, 0, 0, 0},
+                    {0, 0, 0, 1, 2, 1, 0, 0, 0}, {0, 0, 0, 1, 1, 1, 0, 0, 0}};
+            public static final int[][] UPL = {{1, 1, 1, 2, 1},
+                    {1, 2, 2, 2, 1}, {1, 1, 1, 1, 1}, {0, 0, 1, 2, 1},
+                    {0, 0, 1, 2, 1}, {0, 0, 1, 1, 1}};
         }
 
     }
-
 
 }

@@ -16,11 +16,11 @@ import java.util.ArrayList;
 
 /**
  * Created by Kevin on 5/12/2015.
- *
+ * <p/>
  * game state
  */
 public class Map {
-    public static int[][] k = { // this is only temporary until we can optimize draw for larger maps
+    public static int[][] k = { // this is only temporary map
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
             {1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1},
             {1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1},
@@ -47,10 +47,11 @@ public class Map {
 
     /**
      * constructor
-     * @param aGridDimensions grid dimensions
+     *
+     * @param aGridDimensions  grid dimensions
      * @param aPixelDimensions pixel dimensions of surface
-     * @param oi pass in oi
-     * @param resources pass in resources
+     * @param oi               pass in oi
+     * @param resources        pass in resources
      * @throws SocratesNotFoundException
      */
     public Map(Vector aGridDimensions, Vector aPixelDimensions, OI oi, Resources resources) throws SocratesNotFoundException {
@@ -58,7 +59,7 @@ public class Map {
         maxScore = 0;
 
         //calculate tile diameter
-        gridDimensions = new Vector(11, 11);
+        gridDimensions = new Vector(17, 16);
         setPixelDimensions(aPixelDimensions);
 
         //temporary arrays to keep track of game objects
@@ -78,7 +79,7 @@ public class Map {
 
         //parse map
         int i = 0, j;
-        for (int[] chA : k) {//MapGenerator.generate()) {
+        for (int[] chA : MapGenerator.generate()) {
             j = 0;
             for (int ch : chA) {
                 switch (ch) {
@@ -124,6 +125,7 @@ public class Map {
 
     /**
      * tile radius in the form of a vector
+     *
      * @return radius vector
      */
     public Vector getTileRadiusVector() {
@@ -136,6 +138,7 @@ public class Map {
 
     /**
      * get square of tile diameter as magnitude
+     *
      * @return tile diameter magnitude
      */
     public int getSquareTileDiameter() {
@@ -152,6 +155,7 @@ public class Map {
 
     /**
      * set tile width for square playing surface
+     *
      * @param aPixelDimensions pixel dimensions
      */
     private void setPixelDimensions(Vector aPixelDimensions) {
@@ -243,6 +247,7 @@ public class Map {
 
         /**
          * resize bitmaps to tile size
+         *
          * @param size tile width
          */
         public void resizeToTile(int size) {
@@ -261,10 +266,10 @@ public class Map {
      * dictionary for parsing map
      */
     private static class Dictionary {
-        public static final int WALL = 1;
-        public static final int PILL = 0;
+        public static final int WALL = 0;
+        public static final int PILL = 1;
         public static final int GATE = 4;
-        public static final int GHOST = 2;
-        public static final int SOCRATES = 3;
+        public static final int GHOST = 5;
+        public static final int SOCRATES = 9;
     }
 }

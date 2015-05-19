@@ -9,13 +9,22 @@ import java.util.ArrayList;
 
 /**
  * Created by Kevin on 5/12/2015.
+ * <p/>
+ * holds a grid of static entities
  */
 public class EntityGrid<SE extends StaticEntity> implements Collidable {
-    private static final Vector[] DIRECTIONS = {new Vector(0, 1), new Vector(1, 0), new Vector(0, -1), new Vector(-1, 0)};
+    private static final Vector[] DIRECTIONS = {new Vector(0, 0), new Vector(0, 1), new Vector(1, 0), new Vector(0, -1), new Vector(-1, 0)};
     private final GameObjectType TYPE;
     private Map map;
     private SE[][] entities;
 
+    /**
+     * constructor
+     *
+     * @param aMap      pass in map
+     * @param aEntities pass in static entities
+     * @param tribute   pass in tribute
+     */
     @SuppressWarnings("unchecked") //arraylist must accept type SE thus it is safe to cast to SE
     public EntityGrid(Map aMap, ArrayList<SE> aEntities, SE tribute) {
         map = aMap;
@@ -27,20 +36,44 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
         TYPE = tribute.getType(); // tribute properties completely null, only used to obtain type
     }
 
+    /**
+     * get entity at position in pixel dimensions
+     *
+     * @param position
+     * @return entity
+     */
     public SE getEntity(Vector position) {
         return entities[toGridPosition(position).X][toGridPosition(position).Y];
     }
 
+    /**
+     * set entity at given position
+     *
+     * @param position
+     * @param entity
+     */
     public void setEntity(Vector position, SE entity) {
         Vector gridPosition = toGridPosition(position);
         entities[gridPosition.X][gridPosition.Y] = entity;
     }
 
+    /**
+     * get type of static entities
+     *
+     * @return type
+     */
     @Override
     public GameObjectType getType() {
         return TYPE;
     }
 
+    /**
+     * find static entity closest to given entity and check to see if two are colliding
+     *
+     * @param entity
+     * @param time
+     * @return is colliding
+     */
     @Override
     public boolean isColliding(Entity entity, int time) {
         //System.out.println(entity.getType() + " " + entity.nextPosition(time));
@@ -57,6 +90,11 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
 //        return false;
     }
 
+    /**
+     * on collide, pass on collide event to static entity closest to entity given in event
+     *
+     * @param event collision event
+     */
     @Override
     public void onCollide(CollideEvent event) {
         if (event.collisionMember instanceof Entity) {
@@ -69,11 +107,11 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
         }
     }
 
-    private Entity collisionGetEntity(Vector position, Vector velocity) {
-        Vector roundedCenterPosition = roundToGridPosition(position, velocity);
-        return entities[roundedCenterPosition.X][roundedCenterPosition.Y];
-    }
-
+    /**
+     * draw each individual entity
+     *
+     * @param canvas
+     */
     public void draw(Canvas canvas) {
         for (SE[] ses : entities) {
             for (SE se : ses) {
@@ -84,38 +122,42 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
         }
     }
 
+    /**
+     * delete entity at given position if it is dead
+     *
+     * @param position
+     */
     private void garbageCollect(Vector position) {
         garbageCollect(getEntity(position));
     }
 
+    /**
+     * delete entity if given entity is dead
+     *
+     * @param entity
+     */
     private void garbageCollect(Entity entity) {
         if (entity.isDead()) {
             setEntity(entity.getPosition(), null);
         }
     }
 
+    /**
+     * transforms given position to grid position
+     *
+     * @param position
+     * @return grid position
+     */
     private Vector toGridPosition(Vector position) {
         return new Vector(position.X / map.getTileDiameter(), position.Y / map.getTileDiameter());
     }
 
-    private Vector roundToGridPosition(Vector position, Vector velocity) {
-        boolean right = velocity.X > 0;
-        boolean down = velocity.Y > 0;
-        double x = position.X * 1.0 / map.getTileDiameter();
-        double y = position.Y * 1.0 / map.getTileDiameter();
-        if (right) {
-            x = Math.ceil(x);
-        } else {
-            x = Math.floor(x);
-        }
-        if (down) {
-            y = Math.ceil(y);
-        } else {
-            y = Math.floor(y);
-        }
-        return new Vector((int) x, (int) y);
-    }
-
+    /**
+     * get 4 adjacent squares of a given position
+     *
+     * @param position
+     * @return
+     */
     public ArrayList<SE> getSurroundings(Vector position) {
         ArrayList<SE> surroundings = new ArrayList<>();
         for (Vector direction : DIRECTIONS) {
@@ -127,6 +169,11 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
         return surroundings;
     }
 
+    /**
+     * passes tick to each static entity
+     *
+     * @param time
+     */
     public void tick(int time) {
         for (Entity[] e : entities) {
             for (Entity ent : e) {
