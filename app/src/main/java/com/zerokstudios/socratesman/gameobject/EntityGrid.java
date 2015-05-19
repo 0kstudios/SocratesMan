@@ -98,7 +98,7 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
     @Override
     public void onCollide(CollideEvent event) {
         if (event.collisionMember instanceof Entity) {
-            //Entity entityGridObject = collisionGetEntity(((Entity) event.collisionMember).nextPosition(event.elapsedTime), ((Entity) event.collisionMember).getVelocity()); // testing code here for nicer collisions
+//            Entity entityGridObject = collisionGetEntity(((Entity) event.collisionMember).nextPosition(event.elapsedTime), ((Entity) event.collisionMember).getVelocity()); // testing code here for nicer collisions
             Entity entityGridObject = getEntity(((Entity) event.collisionMember).nextPosition(event.elapsedTime));
             if (entityGridObject != null) {
                 entityGridObject.onCollide(event);
@@ -106,6 +106,18 @@ public class EntityGrid<SE extends StaticEntity> implements Collidable {
             }
         }
     }
+
+//    public SE collisionGetEntity(Vector position, Vector velocity) {
+//        double x = position.X*1.0/map.getTileDiameter();
+//        double y = position.Y*1.0/map.getTileDiameter();
+//        if (velocity.X > 0) {
+//            x = Math.ceil(x);
+//        }
+//        if (velocity.Y > 0) {
+//            y = Math.ceil(y);
+//        }
+//        return entities[(int)x][(int)y];
+//    }
 
     /**
      * draw each individual entity

@@ -1,6 +1,7 @@
 package com.zerokstudios.socratesman.gameobject;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 
 import com.zerokstudios.socratesman.Map;
 import com.zerokstudios.socratesman.OI;
@@ -57,6 +58,13 @@ public class Socrates extends Entity {
                 break;
         }
     }
+
+//    @Override
+//    public void draw(Canvas canvas) {
+//        Vector position = getPosition();
+//        int buffer = map.getTileRadius();
+//        canvas.drawBitmap(bitmap, position.X-buffer, position.Y-buffer, null);
+//    }
 
     /**
      * set velocity based on current oi

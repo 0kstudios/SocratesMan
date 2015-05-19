@@ -113,7 +113,8 @@ public abstract class Entity implements Collidable {
      * @param canvas
      */
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(bitmap, position.X, position.Y, null);
+        int buffer = map.getTileRadius();
+        canvas.drawBitmap(bitmap, position.X-buffer, position.Y-buffer, null);
     }
 
     /**

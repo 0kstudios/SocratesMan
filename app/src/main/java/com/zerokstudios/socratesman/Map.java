@@ -84,22 +84,22 @@ public class Map {
             for (int ch : chA) {
                 switch (ch) {
                     case Dictionary.WALL:
-                        wallList.add(new Wall(this, new Vector(j, i).scale(getTileDiameter()), oi, images.getWall()));
+                        wallList.add(new Wall(this, new Vector(j, i).scale(getTileDiameter()).sum(getTileRadiusVector()), oi, images.getWall()));
                         break;
                     case Dictionary.GHOST:
-                        ghostList.add(new Ghost(this, new Vector(j, i).scale(getTileDiameter()), new Vector(0, 0), oi, images.getGhost()));
+                        ghostList.add(new Ghost(this, new Vector(j, i).scale(getTileDiameter()).sum(getTileRadiusVector()), new Vector(0, 0), oi, images.getGhost()));
                         break;
                     case Dictionary.SOCRATES:
                         if (player != null) {
                             throw new SocratesNotFoundException("Double Socrates, cannot identify correct Socrates");
                         }
-                        player = new Socrates(this, new Vector(j, i).scale(getTileDiameter()), new Vector(0, 0), oi, images.getSocrates());
+                        player = new Socrates(this, new Vector(j, i).scale(getTileDiameter()).sum(getTileRadiusVector()), new Vector(0, 0), oi, images.getSocrates());
                         break;
                     case Dictionary.PILL:
                     case Dictionary.GATE:
                     default:
-                        pillList.add(new Pill(this, new Vector(j, i).scale(getTileDiameter()), oi, images.getPill()));
-                        cellList.add(new Cell(this, new Vector(j, i).scale(getTileDiameter()), oi, null));
+                        pillList.add(new Pill(this, new Vector(j, i).scale(getTileDiameter()).sum(getTileRadiusVector()), oi, images.getPill()));
+                        cellList.add(new Cell(this, new Vector(j, i).scale(getTileDiameter()).sum(getTileRadiusVector()), oi, null));
                         maxScore++;
                         break;
                 }
